@@ -1,8 +1,5 @@
 /*------------------------------------------------------------------------------*/
-  /*Edited version of the implementation made for University assignment. 
-   * NOTICE: Apikeys shown on the older version are for the trial version
-   * which has been expired, so they are useless. 
-   */
+  /*Weatherstation running on the webserver. 
   /*Aleksi Jokinen*/
 /*------------------------------------------------------------------------------*/
 /*Libraries used by the program*/
@@ -17,21 +14,27 @@
 /*------------------------------------------------------------------------------*/
 /*Sensor used*/
 Adafruit_BME280 bme;
+
+#define SEALEVELPRESSURE_HPA (1013.25)
+
 /*Definitions for connection*/
 WiFiClient client;
 WiFiMulti WiFiMulti;
 HTTPClient ask;
 /*------------------------------------------------------------------------------*/
 /*Connection config*/
-const char* ssid     = "ssid"; //Wifi SSID
-const char* password = "password"; //Wifi Password
+const char* ssid     = "ARRIS-B9BA"; //Wifi SSID
+const char* password = "D6BE18D1C13CCC4B"; //Wifi Password
 /*Timing definitions, value as milliseconds*/
 unsigned long previousMillis = 18000000; /*Last time data was written (0 for first upload to be at 30min; 18000000 for first upload at power on)*/
 unsigned int writeInterval = 1800000;    /*30 minute interval for the data*/
+unsigned long currentTime = millis();
+unsigned long previousTime = 0;
+const long timeoutTime = 2000; 
 /*------------------------------------------------------------------------------*/
-/*asksensors.com API host config*/
-const char* host = "api.asksensors.com";  /*API host name*/
-const int httpPort = 80;      // port
+//Webserver configuration
+WiFiServer server(80);
+String header;
 /*------------------------------------------------------------------------------*/
 /*Define sensor pins and global variables used in the program*/
 int LUX = 34;
@@ -44,6 +47,7 @@ float temperature = 0, humidity = 0, pressure = 0;
 float OWMtemperature;
 /*------------------------------------------------------------------------------*/
 void setup(){
+   bool status;
   pinMode(LUX, INPUT);
   pinMode(PIR, INPUT);
   pinMode(ledPin, OUTPUT);
@@ -69,23 +73,7 @@ void setup(){
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   Serial.println();
-}
-/*------------------------------------------------------------------------------*/
-/*Use WiFiClient class to create TCP connections*/
-void connectToService(){
-  WiFiClient client;
-  if (!client.connect(host, httpPort)) {
-    Serial.println("Connection failed");
-    return;
-  }else {
-    Serial.println("Uploading sensor data to cloud...");
-  }
-}
-/*------------------------------------------------------------------------------*/
-/*Close TCP connection when it is not needed*/
-void disconnectFromService(){
-  client.stop();
-  Serial.println("Sensor data uploaded.");
+  server.begin();
 }
 /*------------------------------------------------------------------------------*/
 /*Function to get data and parse it from openweathermap.org api using JSON format*/
@@ -125,24 +113,9 @@ void movement() {
  /*Function to upload sensor1 data. Inside this function TCP connection is opened
    when data is uploaded and closed when upload has been done*/
 void sensor1() {
-  connectToService();
-  // Create a URL for updating all modules
   temperature = bme.readTemperature();
   humidity = bme.readHumidity();
   pressure = bme.readPressure() / 100;
-  String url = "http://api.asksensors.com/write/";
-  url += apiKeyIn;
-  url += "?module1=";
-  url += temperature;
-  url += "&module2=";
-  url += temperature;
-  url += "&module3=";
-  url += humidity;  
-  url += "&module4=";
-  url += pressure;
-
-  Serial.print("Requesting URL for Sensor1 data: ");
-  Serial.println(url);
   Serial.println("*****************************************************");
   Serial.print("Temperature: "); 
   Serial.println(temperature);
@@ -151,60 +124,19 @@ void sensor1() {
   Serial.print("Pressure: ");
   Serial.println(pressure);
   Serial.println("*****************************************************");
-  
-    // Send data
-    ask.begin(url); //Specify the URL
-    //Check for the returning code
-    int httpCode = ask.GET();          
-    if (httpCode > 0) { 
-        String payload = ask.getString();
-        Serial.print("Http code: "); 
-        Serial.println(httpCode);
-        Serial.print("Sensor1 modules: ");
-        Serial.println(payload);
-      } else {
-      Serial.println("Error on HTTP request");
-    }
-    ask.end(); //End
-    disconnectFromService();
-    Serial.println("*****************************************************");
-    Serial.println();
+  Serial.println();
 }
 /*------------------------------------------------------------------------------*/
  /*Function to upload sensor2 data. Inside this function TCP connection is opened
    when data is uploaded and closed when upload has been done*/
 void sensor2() {
-  connectToService();
-  int lux = analogRead(34) * 0.9765625; //Convert current to lux using y = 1/2(x) + 0
-  String url2 = "http://api.asksensors.com/write/";
-  url2 += apiKeyInSensor2;
-  url2 += "?module1=";
-  url2 += lux;
-  url2 += "&module4=";
-  url2 += OWMtemperature;  
-  Serial.print("Requesting URL for Sensor2 data: ");
-  Serial.println(url2);
+  int lux = analogRead(34) * 0.9765625; //Convert current to lux using y = 1/2(x) + 0 
   Serial.println("*****************************************************");
   Serial.print("Lux: ");
   Serial.println(lux);
   Serial.print("Openweathermap.org temp: ");
   Serial.println(OWMtemperature);
   Serial.println("*****************************************************");
-    // Send data 
-    ask.begin(url2); //Specify the URL
-    //Check for the returning code
-    int httpCode2 = ask.GET();          
-    if (httpCode2 > 0) { 
-        String payload2 = ask.getString();
-        Serial.print("Http code: ");
-        Serial.println(httpCode2);
-        Serial.print("Sensor2 modules: ");
-        Serial.println(payload2);
-      } else {
-      Serial.println("Error on HTTP request");
-    }
-    ask.end(); //End 
-    disconnectFromService();
     Serial.println("*****************************************************");
     Serial.println();
 }
@@ -215,36 +147,11 @@ void sensor2() {
    if there has been change in the pir value, equaling movement*/
 void pir_data() {
   if (pir != pir_previous) {
-  connectToService();
-  String url3 = "http://api.asksensors.com/write/";
-  url3 += apiKeyInSensor2;
-  url3 += "?module2=";
-  url3 += pir;
-  url3 += "&module3=";
-  url3 += pir;
-  Serial.print("Requesting URL for PIR data: ");
-  Serial.println(url3);
   Serial.println("*****************************************************");
   Serial.print("Movement: ");
   Serial.println(pir_movement);
   Serial.println("*****************************************************");
-    // Send data 
-    ask.begin(url3); //Specify the URL
-    //Check for the returning code
-    int httpCode3 = ask.GET();          
-    if (httpCode3 > 0) { 
-        String payload3 = ask.getString();
-        Serial.print("Http code: ");
-        Serial.println(httpCode3);
-        Serial.print("PIR module: ");
-        Serial.println(payload3);
-      } else {
-      Serial.println("Error on HTTP request");
-    }
-    ask.end(); //End
-    disconnectFromService();
-    Serial.println("*****************************************************");
-    Serial.println();
+  Serial.println();
   } else {
     /*Do nothing*/
   }
@@ -256,6 +163,82 @@ void pir_data() {
   passed or not. If it has passed, write execute sensor1 and sensor2 functions to 
   upload data, if time has not passed, do not execute the functions*/
 void loop(){
+  WiFiClient client = server.available();
+  if (client) {                             // If a new client connects,
+    currentTime = millis();
+    previousTime = currentTime;
+    Serial.println("New Client.");          // print a message out in the serial port
+    String currentLine = "";                // make a String to hold incoming data from the client
+    while (client.connected() && currentTime - previousTime <= timeoutTime) {  // loop while the client's connected
+      currentTime = millis();
+      if (client.available()) {             // if there's bytes to read from the client,
+        char c = client.read();             // read a byte, then
+        Serial.write(c);                    // print it out the serial monitor
+        header += c;
+        if (c == '\n') {                    // if the byte is a newline character
+          // if the current line is blank, you got two newline characters in a row.
+          // that's the end of the client HTTP request, so send a response:
+          if (currentLine.length() == 0) {
+            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+            // and a content-type so the client knows what's coming, then a blank line:
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println("Connection: close");
+            client.println();
+            
+            // Display the HTML web page
+            client.println("<!DOCTYPE html><html>");
+            client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+            client.println("<link rel=\"icon\" href=\"data:,\">");
+            // CSS to style the table 
+            client.println("<style>body { text-align: center; font-family: \"Trebuchet MS\", Arial;}");
+            client.println("table { border-collapse: collapse; width:35%; margin-left:auto; margin-right:auto; }");
+            client.println("th { padding: 12px; background-color: #0043af; color: white; }");
+            client.println("tr { border: 1px solid #ddd; padding: 12px; }");
+            client.println("tr:hover { background-color: #bcbcbc; }");
+            client.println("td { border: none; padding: 12px; }");
+            client.println(".sensor { color:white; font-weight: bold; background-color: #bcbcbc; padding: 1px; }");
+            
+            // Web Page Heading
+            client.println("</style></head><body><h1>ESP32 with BME280</h1>");
+            client.println("<table><tr><th>MEASUREMENT</th><th>VALUE</th></tr>");
+            client.println("<tr><td>Temp. Celsius</td><td><span class=\"sensor\">");
+            client.println(bme.readTemperature());
+            client.println(" *C</span></td></tr>");  
+            client.println("<tr><td>Temp. Fahrenheit</td><td><span class=\"sensor\">");
+            client.println(1.8 * bme.readTemperature() + 32);
+            client.println(" *F</span></td></tr>");       
+            client.println("<tr><td>Pressure</td><td><span class=\"sensor\">");
+            client.println(bme.readPressure() / 100.0F);
+            client.println(" hPa</span></td></tr>");
+            client.println("<tr><td>Approx. Altitude</td><td><span class=\"sensor\">");
+            client.println(bme.readAltitude(SEALEVELPRESSURE_HPA));
+            client.println(" m</span></td></tr>"); 
+            client.println("<tr><td>Humidity</td><td><span class=\"sensor\">");
+            client.println(bme.readHumidity());
+            client.println(" %</span></td></tr>"); 
+            client.println("</body></html>");
+            
+            // The HTTP response ends with another blank line
+            client.println();
+            // Break out of the while loop
+            break;
+          } else { // if you got a newline, then clear currentLine
+            currentLine = "";
+          }
+        } else if (c != '\r') {  // if you got anything else but a carriage return character,
+          currentLine += c;      // add it to the end of the currentLine
+        }
+      }
+    }
+    // Clear the header variable
+    header = "";
+    // Close the connection
+    client.stop();
+    Serial.println("Client disconnected.");
+    Serial.println("");
+  }
+  
   unsigned long currentMillis = millis();
   if(currentMillis - previousMillis > writeInterval) {
   previousMillis = currentMillis;
