@@ -23,8 +23,8 @@ WiFiMulti WiFiMulti;
 HTTPClient ask;
 /*------------------------------------------------------------------------------*/
 /*Connection config*/
-const char* ssid     = "ARRIS-B9BA"; //Wifi SSID
-const char* password = "D6BE18D1C13CCC4B"; //Wifi Password
+const char* ssid     = "ssid"; //Wifi SSID
+const char* password = "password"; //Wifi Password
 /*Timing definitions, value as milliseconds*/
 unsigned long previousMillis = 18000000; /*Last time data was written (0 for first upload to be at 30min; 18000000 for first upload at power on)*/
 unsigned int writeInterval = 1800000;    /*30 minute interval for the data*/
