@@ -1,0 +1,23 @@
+
+
+
+TV POWER
+0x20DF10EF
+NEC
+ * LCD RS pin to digital pin 12
+ * LCD Enable pin to digital pin 11
+ * LCD D4 pin to digital pin 5
+ * LCD D5 pin to digital pin 4
+ * LCD D6 pin to digital pin 3
+ * LCD D7 pin to digital pin 2
+
+
+LCD Wiring
+
+LCD PIN 	Arduino PWM 
+LCD RS	04		06		
+ENABLE	06		08
+D4		11		09
+D5		12		11
+D6		13		12
+D7		14		13
