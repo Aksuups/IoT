@@ -30,6 +30,12 @@ void setup() {
   pinMode(buttonPin, INPUT);
   lcd.begin(16, 2);
   lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Infrared");
+  lcd.setCursor(0, 1);
+  lcd.print("receiver/sender");
+  delay(5000);
+  lcd.clear();
 }
 
 void loop() {
