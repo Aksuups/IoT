@@ -17,6 +17,7 @@ IRrecv irrecv(RECV_PIN);
 decode_results results;
 int buttonState = 0;
 int lastButtonState = 0;
+unsigned long timesSend = 0;
 
 const int RS = 6, ENABLE = 8, D4 = 9, D5 = 11, D6 = 12, D7 = 5;
 LiquidCrystal lcd(RS, ENABLE, D4, D5, D6, D7);
@@ -47,4 +48,7 @@ void loop() {
       lcd.print("0x");
       lcd.setCursor(2, 1);
       lcd.print(results.value, HEX);
+      timesSend++;
+      lcd.setCursor(11, 1);
+      lcd.print(timesSend);
 }
