@@ -18,6 +18,7 @@ decode_results results;
 int buttonState = 0;
 int lastButtonState = 0;
 unsigned long timesSend = 0;
+int testrange = 2774140000;
 
 const int RS = 6, ENABLE = 8, D4 = 9, D5 = 11, D6 = 12, D7 = 5;
 LiquidCrystal lcd(RS, ENABLE, D4, D5, D6, D7);
@@ -36,7 +37,7 @@ void setup() {
 }
 
 void loop() {
-      results.value = random();
+      results.value = testrange;
       irsend.sendNEC(results.value, 32);
       irrecv.enableIRIn();
       Serial.print("Sending IR signal, HEX value: 0x");
@@ -51,4 +52,5 @@ void loop() {
       timesSend++;
       lcd.setCursor(11, 1);
       lcd.print(timesSend);
+      testrange++;
 }
