@@ -25,7 +25,7 @@ Starting sequences for the led codes.
 0xA55Axxx									27741xxxxx
 0x20DFxxx									5515xxxxx
 
-//Todo, set program to run from 2774100000 to 2774199999
+//Todo, set program to run from 2774140000 to 2774199999
 //to see if additional codes are found.
 //
 //Same with other addresses. Ranging from
