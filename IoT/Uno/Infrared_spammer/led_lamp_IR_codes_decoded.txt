@@ -1,0 +1,31 @@
+LED lamp NEC codes 
+
+By default, the led lamp changes colors on a cycle.
+
+Protocol: NEC
+
+
+CODE			ACTION						Decimal value				
+
+0xA55A50AF		Red							2774159535
+0xA55A30CF		Orange						2774151375
+
+0xA55A906F		Blue(ish) / purple?			2774175855
+0x20DF609F									551510175
+
+
+0xA55A10EF		Green						2774143215
+0x20DF10EF									551489775
+
+0x20DF48B7		Blinks led					551504055
+0x20DF40BF		Blinks led? 				551502015
+0x20DF807F		Blinks led					551518335
+
+Starting sequences for the led codes.
+0xA55Axxx
+0x20DFxxx
+
+
+
+
+
