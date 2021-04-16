@@ -18,7 +18,9 @@ decode_results results;
 int buttonState = 0;
 int lastButtonState = 0;
 unsigned long timesSend = 0;
-int testrange = 2774140000;
+
+//Starting point for the increment address range. 
+unsigned long  testrange = 0xA55A50AF;
 
 const int RS = 6, ENABLE = 8, D4 = 9, D5 = 11, D6 = 12, D7 = 5;
 LiquidCrystal lcd(RS, ENABLE, D4, D5, D6, D7);
