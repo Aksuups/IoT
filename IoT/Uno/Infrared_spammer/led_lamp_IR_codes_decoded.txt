@@ -22,10 +22,14 @@ CODE			ACTION						Decimal value
 0x20DF807F		Blinks led					551518335
 
 Starting sequences for the led codes.
-0xA55Axxx
-0x20DFxxx
+0xA55Axxx									27741xxxxx
+0x20DFxxx									5515xxxxx
 
-
+//Todo, set program to run from 2774100000 to 2774199999
+//to see if additional codes are found.
+//
+//Same with other addresses. Ranging from
+// 551500000 to 551599999 
 
 
 
