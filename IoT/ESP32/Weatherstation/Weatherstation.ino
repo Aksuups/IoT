@@ -57,11 +57,11 @@ void setup(){
   Serial.println("*****************************************************");
   Serial.println();
   Serial.println("Establishing wifi connection...");
-    //Check if BME280 sensor is present.
-    if (!bme.begin(0x76)) {
+    if (!bme.begin(0x76)) //Check if BME280 sensor is present.
+    {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
     while (1);
-  }
+    }
   /*Connect to wifi network*/
   WiFiMulti.addAP(ssid, password);
   while (WiFiMulti.run() != WL_CONNECTED) {
