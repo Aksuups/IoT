@@ -24,7 +24,7 @@ HTTPClient ask;
 /*------------------------------------------------------------------------------*/
 /*Connection config*/
 const char* ssid     = "ssid"; //Wifi SSID
-const char* password = "password"; //Wifi Password
+const char* password = "passwd"; //Wifi Password
 /*Timing definitions, value as milliseconds*/
 unsigned long previousMillis = 18000000; /*Last time data was written (0 for first upload to be at 30min; 18000000 for first upload at power on)*/
 unsigned int writeInterval = 1800000;    /*30 minute interval for the data*/
@@ -55,8 +55,8 @@ void setup(){
   /*Open serial*/
   Serial.begin(115200);
   Serial.println("*****************************************************");
-  Serial.println("Program Start : Connect ESP32 to AskSensors.");
-  Serial.println("Wait for WiFi... ");
+  Serial.println();
+  Serial.println("Establishing wifi connection...");
     //Check if BME280 sensor is present.
     if (!bme.begin(0x76)) {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
