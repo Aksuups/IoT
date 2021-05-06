@@ -36,7 +36,7 @@ const long timeoutTime = 2000;
 WiFiServer server(80);
 String header;
 /*------------------------------------------------------------------------------*/
-/*Define sensor pins and global variables used in the program*/
+/*Define sensor pins and global variables used in the application*/
 int LUX = 34;
 byte PIR = 26;
 byte ledPin = 4;
