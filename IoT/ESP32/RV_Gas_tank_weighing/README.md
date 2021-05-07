@@ -1,6 +1,6 @@
 This is a program made for RV gas tank weighing. 
 
-Plans for the solution is to use HX711 module and/or pressure plates (kinf of)
+Plans for the solution is to use HX711 module and/or pressure plates (or similar)
 to be put physically under the gas tanks, to calculate remaining gas. Code needs to be adjusted 
 for the different weight of every gas tank, to measure actual amount of gas. (Accurately or within +- of 
 reasonable difference)
