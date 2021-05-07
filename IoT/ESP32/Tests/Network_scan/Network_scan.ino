@@ -17,9 +17,9 @@
     }
      
     void loop() {
-      Serial.println("Scanning avalable networks...");
-      Serial.println("...");
-      Serial.println("...");
+      Serial.println("Scanning available networks...");
+      Serial.println("");
+      Serial.println("");
       
       int n = WiFi.scanNetworks(); //Return the number of networks found.
       Serial.println("Scanning completed.");
