@@ -1,7 +1,7 @@
-    /*
-     *  This sketch demonstrates how to scan WiFi networks. 
-     *  The API is almost the same as with the WiFi Shield library, 
-     *  the most obvious difference being the different file you need to include:
+    /* Network scanning test tool for the ESP32 microcontroller boards.
+     * This tool is made to see that basic functionality and boards work. 
+     * 
+     * Developed by Aleksi Jokinen 2021
      */
     #include "WiFi.h"
      
@@ -17,17 +17,19 @@
     }
      
     void loop() {
-      Serial.println("scan start");
-     
-      // WiFi.scanNetworks will return the number of networks found
-      int n = WiFi.scanNetworks();
-      Serial.println("scan done");
+      Serial.println("Scanning avalable networks...");
+      Serial.println("...");
+      Serial.println("...");
+      
+      int n = WiFi.scanNetworks(); //Return the number of networks found.
+      Serial.println("Scanning completed.");
       if (n == 0)
-        Serial.println("no networks found");
+        Serial.println("No networks found."); //If n = 0, Return with the 
       else
       {
         Serial.print(n);
         Serial.println(" networks found");
+        Serial.println("");
         for (int i = 0; i < n; ++i)
         {
           // Print SSID and RSSI for each network found
@@ -42,7 +44,5 @@
         }
       }
       Serial.println("");
-     
-      // Wait a bit before scanning again
       delay(5000);
     }
