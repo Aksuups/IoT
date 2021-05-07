@@ -1,1 +1,1 @@
-All IoT-projects using arduino nano will be here.
+Initial commit for the upcoming projects using Arduino Nano-microcontroller
