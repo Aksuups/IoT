@@ -17,4 +17,8 @@ User can see the status of the gas tanks (amount of gas left per tank) by naviga
 
 Additionally software should include process for calibrating the sensor. 
 
+For connecting the load cells/sensors in various different ways:
+https://circuitjournal.com/50kg-load-cells-with-HX711#2x50
 
+Link above contains instructions for connecting 4, 2 and 1 cells to HX711 
+NOTE: These load sensors (not cells), have three wires.
