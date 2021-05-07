@@ -1,12 +1,8 @@
-/*------------------------------------------------------------------------------*/
   /*Infared receiver and sender. Sensors repurposed from old dvd-player and remote.
-  /*Aleksi Jokinen*/
-  /*
-  * Third party library used: IRremote.h
-  * Dev: https://github.com/Arduino-IRremote/Arduino-IRremote
-  * Initially coded 2009 Ken Shirriff http://www.righto.com Copyright (c) 2016 Rafi Khan Copyright (c) 2020-2021 Armin Joachimsmeyer
-  */
-/*------------------------------------------------------------------------------*/
+   * 
+   * Developed by Aleksi Jokinen 2021
+   */
+  
 /*Libraries used by the program*/
 #include <IRremote.h>
 #include <LiquidCrystal.h>
