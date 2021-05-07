@@ -1,8 +1,8 @@
 #include "HX711.h"
 
 //Circuit wiring 
-const int LOADCELL_DOUT_PIN = 2;
-const int LOADCELL_SCK_PIN = 3;
+const int LOADCELL_DOUT_PIN = 7;
+const int LOADCELL_SCK_PIN = 6;
 
 //Init HX711 sensor/module
 HX711 scale;
@@ -20,7 +20,6 @@ void loop(){
   else 
   {
   Serial.println("HX711 sensor not found.");
-  return 0;  
   }
   delay(1000);
 }
