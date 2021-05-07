@@ -1,7 +1,11 @@
-/*------------------------------------------------------------------------------*/
-  /*Weatherstation running on the webserver. 
-  /*Aleksi Jokinen*/
-/*------------------------------------------------------------------------------*/
+/* Weatherstation which uses webserver to display  
+ * received sensor values.
+ * Sensors used for determining barometric pressure
+ * temperature, humidity, emitted light(lux) and movement.
+ * 
+ * Developed by Aleksi Jokinen 2021
+ */
+
 /*Libraries used by the program*/
 #include <WiFi.h>
 #include <WiFiMulti.h>
@@ -226,8 +230,8 @@ void loop(){
           } else { // if you got a newline, then clear currentLine
             currentLine = "";
           }
-        } else if (c != '\r') {  // if you got anything else but a carriage return character,
-          currentLine += c;      // add it to the end of the currentLine
+        } else if (c != '\r') {  // If you got anything else but a carriage return character,
+          currentLine += c;      // add it to the end of the currentLine.
         }
       }
     }
