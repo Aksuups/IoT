@@ -22,7 +22,7 @@
       Serial.println("");
       
       int n = WiFi.scanNetworks(); //Return the number of networks found.
-      Serial.println("Scanning completed.");
+      Serial.println("Scanning completed.\n");
       if (n == 0)
         Serial.println("No networks found."); //If n = 0, Return with the 
       else
