@@ -13,7 +13,7 @@
       WiFi.disconnect();
       delay(100);
      
-      Serial.println("Setup done");
+      Serial.println("Setup completed.");
     }
      
     void loop() {
