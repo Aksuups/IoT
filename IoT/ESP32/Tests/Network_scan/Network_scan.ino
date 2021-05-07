@@ -13,14 +13,11 @@
       WiFi.disconnect();
       delay(100);
      
-      Serial.println("Setup completed.");
+      Serial.println("\nSetup completed.\n");
     }
      
     void loop() {
-      Serial.println("Scanning available networks...");
-      Serial.println("");
-      Serial.println("");
-      
+      Serial.println("Scanning available networks...\n");      
       int n = WiFi.scanNetworks(); //Return the number of networks found.
       Serial.println("Scanning completed.\n");
       if (n == 0)
