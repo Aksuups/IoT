@@ -1,14 +1,30 @@
-#include "HX711.h"
+/* Network connectivity test tool for the ESP32 microcontroller boards.
+ * This tool is made to see that basic functionality and boards work. 
+ * 
+ * Developed by Aleksi Jokinen 2021
+ * --------------------------------------------------------------------
+ *  CIRCUIT WIRING
+ *  OUTPUT (HX711 => ESP32) 
+ *  Vcc pin  => 3.3V 
+ *  GND pin  => GND 
+ *  SCK pin  => GPIO 25 (D25)
+ *  DOUT pin => GPIO 26 (D26) 
+ * --------------------------------------------------------------------
+*/
 
-//Circuit wiring 
-const int LOADCELL_DOUT_PIN = 2;
-const int LOADCELL_SCK_PIN = 3;
+#include <HX711.h>
+#include "soc/rtc.h"
 
-//Init HX711 sensor/module
+// HX711 DT and SCK definitions. 
+#define DOUT_PIN 26
+#define SCK_PIN 25
+
+// Init HX711 sensor/module
 HX711 scale;
 void setup(){
   Serial.begin(115200);
-  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+  rtc_clk_cpu_freq_set(RTC_CPU_FREQ_80M); // Adjust ESP32 clock rate frequency to the timing of the HX711 (80MHz).
+  scale.begin(DOUT_PIN, SCK_PIN);
 }
 
 void loop(){
