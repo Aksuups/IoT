@@ -1,1 +1,2 @@
-Schematic taken from: https://easyeda.com/adamfk/hx711-module Author: adamfk
+Schematic saved from: https://easyeda.com/adamfk/hx711-module  
+Author: adamfk
