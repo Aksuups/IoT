@@ -49,14 +49,16 @@ float data;
 HX711 scale;
 
 // Network connection configuration.
-const char* ssid = "ARRIS-B9BA";
-const char* passwd = "D6BE18D1C13CCC4B";
+const char* ssid = "*****";
+const char* passwd = "*****";
 
 // Set static IP address for the ESP32.
+/*
 IPAddress local_ip(192, 168, 0, 68);
 IPAddress gateway(192, 168, 0, 1); // Defaults to the device IP address with the last octet set to 1
 IPAddress subnet(255, 255, 255, 0);
 IPAddress dns(8, 8, 8, 8); // Google's Public DNS, Secondary: 8.8.4.4 
+*/
 
 // Initialize connection.
 WiFiClient client;
@@ -80,17 +82,17 @@ void getData(){
   data = random(10, 5000) / 100.0; // DEBUG (Sensor not connected to ESP32)
   Serial.println(data); // DEBUG (Sensor not connected to ESP32)
   }
-  delay(1000);
+  delay(10000);
 }
 
 void setup(){
   Serial.begin(115200);
-  delay(5000);
+  delay(5000);  //DEBUG
   //rtc_clk_cpu_freq_set(RTC_CPU_FREQ_80M); // Adjust ESP32 clock rate frequency to the timing of the HX711 (80MHz).
   scale.begin(DOUT_PIN, SCK_PIN);
 
   //Apply IP address, gateway and subnet mask defined in configuration.
-  WiFi.config(local_ip, gateway, subnet);
+  //WiFi.config(local_ip, gateway, subnet);
 
   // Initialize Access Point mode for ESP32.
   WiFi.mode(WIFI_AP);
