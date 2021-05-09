@@ -1,24 +1,31 @@
-Project for tracking the gas bottle levels using load cells.
+## Project for tracking motorhome gas tank levels using ESP32 microcontroller and HX711 Amp with load cells.  
 
-Plans for the solution is to use HX711 module and/or pressure plates (or similar)
-to be put physically under the gas bottles, to calculate remaining gas. Code needs to account
-for the small variation between each gas bottle weight, to measure actual amount of gas. (Accurately or within +- of
-reasonable difference)
+Values from load cells are amplified using HX711 amplifier connected to ESP32.  
+Webserver is created locally inside ESP32.    
+ESP32 is connected to motorhome's internal network wirelessly.  
 
-ESP32 is the microcontroller chosen for this project, since it has capability of using either Wifi or
-bluetooth as a communication protocol.
+User interface is accessed using browser and navigating to 192.168.0.68/ which is static IP address 
+assigned to the ESP32 microcontroller. 
+ 
+ **HX711 Specifications** 
 
-At the moment project is leaning more towards using wifi. This is due possibility to connect automatically
-to RV's internal wifi network and host a webserver.
+    Operation Voltage: 2.7V--5V
+    Operation Current: < 1.5mA
+    Selectable 10SPS or 80SPS output data rate
+    Simultaneous 50 and 60Hz supply rejection
+   
+ **Load cell Specifications** 
 
-Simple UI is provided at given IP address which is run locally on a webserver inside ESP32.
-
-User can see the status of the gas bottles (amount of gas left per bottle), by navigating to given IP address.
-
-Additionally software should include process for calibrating the sensor for accurate measurements.
-
-For connecting the load cells/sensors in various different ways:
-https://circuitjournal.com/50kg-load-cells-with-HX711#2x50
-
-Link above contains instructions for connecting 4, 2 and 1 cells to HX711 AMP.
-NOTE: These load sensors, have three wires.
+    Type: Strain gauge
+    Accuracy: ±0.05% (50kg x 0.0005 = 0.025kg -> ±25g)
+    Wires: Three wires (Red, white, green)
+    Maximum weight: 50.00kg (per cell, 200.00kg total)
+    Wiring: Can be wired to Amp using 1, 2, or 4 cell configuration
+            Quarter Wheatstone bridge = 1 cell
+              Half Wheatstone bridge = 2 cells
+              Full Wheatstone bridge = 4 cells
+    
+**Links:**  
+[Circuitjournal tutorial](https://circuitjournal.com/50kg-load-cells-with-HX711)  
+[Schematic by adamfk](https://easyeda.com/adamfk/hx711-module)  
+[HX711 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf)
