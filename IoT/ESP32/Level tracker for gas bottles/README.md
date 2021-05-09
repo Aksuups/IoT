@@ -28,4 +28,5 @@ assigned to the ESP32 microcontroller.
 **Links:**  
 [Circuitjournal tutorial](https://circuitjournal.com/50kg-load-cells-with-HX711)  
 [Schematic by adamfk](https://easyeda.com/adamfk/hx711-module)  
-[HX711 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf)
+[HX711 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf)  
+[Display and BME280 sensor guide](https://www.youtube.com/watch?v=eI-4_QyVenw)
