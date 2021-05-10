@@ -132,7 +132,7 @@ void setup(){
   server.begin();
   Serial.println("Server succesfully started.\n");
   delay(500);
-  Serial.println("Initialaising completed.\n");
+  Serial.println("Initialising completed.\n");
 }
 
 void loop(){
