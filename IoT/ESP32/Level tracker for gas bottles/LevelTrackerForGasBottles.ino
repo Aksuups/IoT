@@ -53,12 +53,10 @@ const char* ssid = "*****";
 const char* passwd = "*****";
 
 // Set static IP address for the ESP32.
-/*
 IPAddress local_ip(192, 168, 0, 68);
 IPAddress gateway(192, 168, 0, 1); // Defaults to the device IP address with the last octet set to 1
 IPAddress subnet(255, 255, 255, 0);
 IPAddress dns(8, 8, 8, 8); // Google's Public DNS, Secondary: 8.8.4.4 
-*/
 
 // Initialize connection.
 WiFiClient client;
@@ -87,12 +85,24 @@ void getData(){
 
 void setup(){
   Serial.begin(115200);
-  delay(5000);  //DEBUG
+  delay(10000);
+  Serial.println("Monitoring system for tracking gas bottle levels.");
+  delay(500);
+  Serial.println("Additionally software tracks");
+  delay(500);
+  Serial.println("humidity, pressure and temperature in the environment.\n");
+  delay(500);
+  Serial.println("Software version: 1.0 (beta).");
+  delay(500);
+  Serial.println("Developed by Aleksi Jokinen © 2021\n");
+  Serial.println("Initialising program....\n");
+  delay(2000);
+
   //rtc_clk_cpu_freq_set(RTC_CPU_FREQ_80M); // Adjust ESP32 clock rate frequency to the timing of the HX711 (80MHz).
   scale.begin(DOUT_PIN, SCK_PIN);
 
   //Apply IP address, gateway and subnet mask defined in configuration.
-  //WiFi.config(local_ip, gateway, subnet);
+  WiFi.config(local_ip, gateway, subnet);
 
   // Initialize Access Point mode for ESP32.
   WiFi.mode(WIFI_AP);
@@ -101,23 +111,28 @@ void setup(){
   // Connect ESP32 to the network.
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(ssid, passwd);
-  Serial.println("Connecting to network: ");
-  Serial.print(ssid);
+  Serial.println("Establishing connection to: ");
+  Serial.println(ssid);
   // Wait until device is connected to the network.
   while (WiFiMulti.run() != WL_CONNECTED) {
     Serial.print(".");
   }
   // Print IP Address to serial monitor when connected.
-  Serial.println("");
-  Serial.print("Connected to network: ");
+  delay(2000);
+  Serial.println("Status: OK");
+  Serial.println("Connection established.");
+  Serial.print("Network: ");
   Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  // Server update routine.
   // Start the server.
+  Serial.println("\nBooting up the server...");
+  delay(2000);
   server.begin();
-  Serial.println("Server succesfully started.");
+  Serial.println("Server succesfully started.\n");
+  delay(500);
+  Serial.println("Initialaising completed.\n");
 }
 
 void loop(){
@@ -163,12 +178,13 @@ void loop(){
             client.println("<h2>Gas amount monitor</h2><br>");
             client.println("<h2></h2");
             client.println("<h3>Gas on tank:<span id=\"data\">");
-            client.println(data);
+            client.println(data);       // Push sensor data to the html-page.
             client.println("</span> kg</h3><br>");
             client.println("<br>");
             client.println("<br>");
-            client.println("<br><a href=\"https://github.com/Aksuups/IoT/tree/main/IoT/ESP32/Level%20tracker%20for%20gas%20bottles\">Projects Github page</a>");
+            client.println("<button class=\"button\" onClick=\"window.location.reload()\">Refresh</button>");         //Click-button for updating data.
             client.println("</div>");
+            client.println("<br><br><br><a href=\"https://github.com/Aksuups/IoT/tree/main/IoT/ESP32/Level%20tracker%20for%20gas%20bottles\">Projects Github page</a>");
             client.println("</body>");
             client.println("</html>");
             client.println();           // End HTTP response with blank line.
