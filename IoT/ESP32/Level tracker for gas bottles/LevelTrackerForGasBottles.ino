@@ -1,20 +1,27 @@
 /*
  * ------------------------------------------------------------------------ *
- * Source code for displaying motorhome gas bottle levels using locally     *
- * created server, which can be accessed through web browser.               *
+ *  Source code for displaying motorhome gas bottle levels using locally    *
+ *  created server, which can be accessed through web browser.              *
  * ------------------------------------------------------------------------ *
- * Microcontroller: ESP32                                                   *
- * Sensor: HX711 load cell amplifier                                        *
+ *  Microcontroller: ESP32                                                  *
+ *  Sensor: HX711 load cell amplifier                                       *
  *  ----------------------------------------------------------------------- *
  *  Developed by Aleksi Jokinen © 2021                                      *
  *  https://www.github.com/Aksuups                                          *
  * ------------------------------------------------------------------------ *
- *  CIRCUIT WIRING                                                          *
- *  OUTPUT (HX711 => ESP32)                                                 *
+ *  SENSOR WIRING                                                           *
+ *  HX711    => ESP32                                                       *
  *  Vcc pin  => 3.3V                                                        *
  *  GND pin  => GND                                                         *
  *  SCK pin  => GPIO 25 (D25)                                               *
  *  DOUT pin => GPIO 26 (D26)                                               *
+ * ------------------------------------------------------------------------ *
+ *  SENSOR WIRING                                                           *
+ *  BME280   => ESP32                                                       *
+ *  Vcc pin  => 3.3V                                                        *
+ *  GND pin  => GND                                                         *
+ *  SCL pin  => GPIO 22 (D22) I2C Clock                                     *
+ *  SDA pin  => GPIO 21 (D21) I2C Data                                      *
  * ------------------------------------------------------------------------ *
  *                           !!!     NOTICE     !!!                         *
  *             THIS SOURCE CODE IS IN ACTIVE DEVELOPMENT AND WILL           *
@@ -36,24 +43,28 @@
 #include <HTTPClient.h>
 #include <HX711.h>
 #include <SPI.h>
+#include <Adafruit_BME280.h>
+#include <Adafruit_Sensor.h>
 //#include "soc/rtc.h"
 
 // HX711 DT and SCK definitions. 
 #define DOUT_PIN 26
 #define SCK_PIN 25
+#define SEALEVELPRESSURE_HPA (1013.25)
 
 // Define global variables.
 unsigned long currentTime = millis();
 unsigned long previousTime = 0;
 const long timeoutTime = 2000; 
-float data;
+float data1, data2, temperature, humidity, pressure;
 
 // Initialize HX711 LC amplifier.
 HX711 scale;
+Adafruit_BME280 bme;
 
 // Network connection configuration.
-const char* ssid = "*****";
-const char* passwd = "*****";
+const char* ssid = "ARRIS-B9BA";
+const char* passwd = "D6BE18D1C13CCC4B";
 
 // Set static IP address for the ESP32.
 IPAddress local_ip(192, 168, 0, 68);
@@ -72,22 +83,49 @@ String header;
 
 void getData(){
   if (scale.is_ready()){
-    data = random(10, 5000) / 100.0; // DEBUG (Sensor not connected to ESP32)
+    data1 = random(10, 1100) / 100.0; // DEBUG (Sensor not connected to ESP32)
+    data2 = random(10, 1100) / 100.0; // DEBUG (Sensor not connected to ESP32)
     //data = scale.read();
-    Serial.print("HX711 sensor reading : ");
-    Serial.println(data);
+    Serial.print("Tank 1: ");
+    Serial.print(data1);
+    Serial.println(" kg");
+    Serial.print("Tank 2: ");
+    Serial.print(data2);
+    Serial.println(" kg");
   } 
   else 
   {
-  Serial.println("HX711 sensor not found.");
-  data = random(10, 5000) / 100.0; // DEBUG (Sensor not connected to ESP32)
-  Serial.println(data); // DEBUG (Sensor not connected to ESP32)
+    data1 = random(10, 1100) / 100.0; // DEBUG (Sensor not connected to ESP32)
+    data2 = random(10, 1100) / 100.0; // DEBUG (Sensor not connected to ESP32)
+    Serial.print("Tank 1: ");
+    Serial.print(data1);
+    Serial.println(" kg");
+    Serial.print("Tank 2: ");
+    Serial.print(data2);
+    Serial.println(" kg");
+
+    temperature = bme.readTemperature();
+    humidity = bme.readHumidity();
+    pressure = bme.readPressure() / 100.0F;
+    Serial.print("Temperature: "); 
+    Serial.print(temperature);
+    Serial.println(" °C");
+    Serial.print("Humidity: ");
+    Serial.print(humidity);
+    Serial.println(" %");
+    Serial.print("Pressure: ");
+    Serial.print(pressure);
+    Serial.println(" hPa");
   }
   delay(10000);
 }
 
 void setup(){
   Serial.begin(115200);
+  if (!bme.begin(0x76)) { //Check if BME280 sensor is present.
+    Serial.println("BME280 sensor not found.");
+    while (1);
+    }
   delay(10000);
   Serial.println("Monitoring system for tracking gas bottle levels.");
   delay(500);
@@ -122,7 +160,7 @@ void setup(){
   }
   // Print IP Address to serial monitor when connected.
   delay(2000);
-  Serial.println("Status: OK");
+  Serial.println("\nStatus: OK");
   Serial.println("Connection established.");
   Serial.print("Network: ");
   Serial.println(ssid);
@@ -178,11 +216,23 @@ void loop(){
             client.println("</style>");
             client.println("<body>");
             client.println("<div class=\"card\">");
-            client.println("<h2>Gas amount monitor</h2><br>");
-            client.println("<h2></h2");
-            client.println("<h3>Gas on tank:<span id=\"data\">");
-            client.println(data);       // Push sensor data to the html-page.
-            client.println("</span> kg</h3><br>");
+            client.println("<h2>Gas status monitor</h2>");
+            client.println("Gas on tank 1:<span id=\"data\">");
+            client.println(data1);       // Push sensor data to the html-page.
+            client.println("</span> kg<br>");
+            client.println("Gas on tank 2:<span id=\"data\">");
+            client.println(data2);       // Push sensor data to the html-page.
+            client.println("</span> kg<br>");
+            client.println("<h2>Motorhome in cabin monitor</h2>");
+            client.println("Temperature:<span id=\"data\">");
+            client.println(temperature);       // Push sensor data to the html-page.
+            client.println("</span>  C<br>");
+            client.println("Humidity:<span id=\"data\">");
+            client.println(humidity);       // Push sensor data to the html-page.
+            client.println("</span>  %<br>");
+            client.println("Pressure:<span id=\"data\">");
+            client.println(pressure);       // Push sensor data to the html-page.
+            client.println("</span>  hPa");
             client.println("<br>");
             client.println("<br>");
             client.println("<button class=\"button\" onClick=\"window.location.reload()\">Refresh</button>");         //Click-button for updating data.
