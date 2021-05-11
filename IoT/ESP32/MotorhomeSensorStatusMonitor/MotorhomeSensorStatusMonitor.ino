@@ -199,7 +199,7 @@ void loop(){
             client.println();
             
             // Display the HTML web page
-            client.println("<!DOCTYPE html>");
+            client.println("<!DOCTYPE html><title>Motorhome sensor status monitor</title>");
             client.println("<html>");
             client.println("<style>");
             client.println(".card{");
