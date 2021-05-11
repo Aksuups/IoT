@@ -116,6 +116,7 @@ void getData(){
     Serial.print("Pressure: ");
     Serial.print(pressure);
     Serial.println(" hPa");
+    Serial.println();
   }
   delay(10000);
 }
@@ -128,10 +129,8 @@ void setup(){
     }
   delay(10000);
   Serial.println("Monitoring system for tracking gas bottle levels.");
-  delay(500);
-  Serial.println("Additionally software tracks");
-  delay(500);
-  Serial.println("humidity, pressure and temperature in the environment.\n");
+  Serial.println("Additionally software tracks humidity,");
+  Serial.println("pressure and temperature in the environment.\n");
   delay(500);
   Serial.println("Software version: 1.0 (beta).");
   delay(500);
@@ -202,6 +201,8 @@ void loop(){
             client.println("<!DOCTYPE html><title>Motorhome sensor status monitor</title>");
             client.println("<html>");
             client.println("<style>");
+            client.println("h2 { margin-bottom: -20px;}");
+            client.println("td, th {text-align: center; padding: 2px;}");
             client.println(".card{");
             client.println("font-family: Tahoma, sans-serif;");
             client.println("max-width: 600px;");
@@ -217,27 +218,32 @@ void loop(){
             client.println("<body>");
             client.println("<div class=\"card\">");
             client.println("<h2>Gas status monitor</h2>");
-            client.println("Gas on tank 1:<span id=\"data\">");
-            client.println(data1);       // Push sensor data to the html-page.
-            client.println("</span> kg<br>");
-            client.println("Gas on tank 2:<span id=\"data\">");
-            client.println(data2);       // Push sensor data to the html-page.
-            client.println("</span> kg<br>");
+            client.println("<table><tr><td>");
+            client.println("Gas tank1&emsp;</td><td>");
+            client.print(data1);       
+            client.println("kg</td><br>");
+            client.println("</tr><tr><td>");
+            client.println("Gas tank2&emsp;</td><td>");
+            client.print(data2);       
+            client.println("kg</td><br></tr></table><br>");
             client.println("<h2>Motorhome in cabin monitor</h2>");
-            client.println("Temperature:<span id=\"data\">");
-            client.println(temperature);       // Push sensor data to the html-page.
-            client.println("</span>  C<br>");
-            client.println("Humidity:<span id=\"data\">");
-            client.println(humidity);       // Push sensor data to the html-page.
-            client.println("</span>  %<br>");
-            client.println("Pressure:<span id=\"data\">");
-            client.println(pressure);       // Push sensor data to the html-page.
-            client.println("</span>  hPa");
+            client.println("<table><tr><td>");
+            client.println("Temperature</td><td>");
+            client.println(temperature);       
+            client.println("&#8451;</td><br>");
+            client.println("</tr><tr><td>");
+            client.println("Humidity</td><td>");
+            client.println(humidity);       
+            client.println("%</td><br>");
+            client.println("</tr><tr><td>");
+            client.println("Pressure</td><td>");
+            client.println(pressure);       
+            client.println("hPa</td></tr></table>");
             client.println("<br>");
             client.println("<br>");
-            client.println("<button class=\"button\" onClick=\"window.location.reload()\">Refresh</button>");         //Click-button for updating data.
+            client.println("<button class=\"button\" onClick=\"window.location.reload()\">Refresh</button>");
             client.println("</div>");
-            client.println("<br><br><br><a href=\"https://github.com/Aksuups/IoT/tree/main/IoT/ESP32/MotorhomeSensorStatusMonitor\">Software Github page</a>");
+            client.println("<br><br><br><a href=\"https://github.com/Aksuups/IoT/tree/main/IoT/ESP32/MotorhomeSensorStatusMonitor\"target=\"_blank\">Source code on Github</a>");
             client.println("</body>");
             client.println("</html>");
             client.println();           // End HTTP response with blank line.
