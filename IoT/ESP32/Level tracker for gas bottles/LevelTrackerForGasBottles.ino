@@ -16,9 +16,12 @@
  *  SCK pin  => GPIO 25 (D25)                                               *
  *  DOUT pin => GPIO 26 (D26)                                               *
  * ------------------------------------------------------------------------ *
- *                                   NOTICE                                 *
- *               Lines ending with DEBUG are for debugging purposes,        *
- *         and for simulating sensor before making actual prototype wirings.*
+ *                           !!!     NOTICE     !!!                         *
+ *             THIS SOURCE CODE IS IN ACTIVE DEVELOPMENT AND WILL           *
+ *            CHANGE A LOT DURING THIS PHASE. WHILE IN DEVELOPMENT,         *
+ *        THERE WILL BE LINES OF CODE FOR DEBUGGING AND OTHER PURPOSES.     *
+ *        THESE LINES WILL BE REMOVED WHEN NEARING THE FINISHING PHASE,     *
+ *                  WHERE CODE WILL BE OPTIMIZED AND CLEANED.               *
  * ------------------------------------------------------------------------ *
  *                                   TO DO                                  *
  *                             Sensor calibration                           *
