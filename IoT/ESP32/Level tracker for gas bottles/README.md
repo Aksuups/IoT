@@ -5,7 +5,14 @@ Additionally ESP32 utilizes BME280-sensor to track pressure, humidity and temper
 Values from load cells are amplified using HX711 amplifier connected to ESP32.  
 Webserver is created locally inside ESP32.    
 ESP32 is connected to motorhome's internal network wirelessly.  
-  
+
+ **Powering microcontroller and components**
+    
+    Microcontroller gets power from motorhomes 12V power supply with   
+    Texas Instruments LM2596 Step-Down Voltage Regulator in between to   
+    regulate voltage presicely. 12V is stepped down to 6-7V 1A to meet  
+    power consumption demands, but to also reduce amount of heat dissipated  
+    from the microcontroller.  
     
  **Two ways to access UI and display data**  
     
@@ -64,4 +71,5 @@ ESP32 is connected to motorhome's internal network wirelessly.
 [Schematic by adamfk](https://easyeda.com/adamfk/hx711-module)  
 [HX711 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf)  
 [Display and BME280 sensor guide](https://www.youtube.com/watch?v=eI-4_QyVenw)  
-[BME280 technical specifications](https://nettigo.eu/products/module-pressure-humidity-and-temperature-sensor-bosch-bme280)
+[BME280 technical specifications](https://nettigo.eu/products/module-pressure-humidity-and-temperature-sensor-bosch-bme280)  
+[LM2596 technical specifications and datasheet](https://www.ti.com/lit/ds/symlink/lm2596.pdf?ts=1620647119293&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FLM2596%253Futm_source%253Dgoogle%2526utm_medium%253Dcpc%2526utm_campaign%253Dapp-null-null-GPN_EN-cpc-pf-google-wwe%2526utm_content%253DLM2596%2526ds_k%253DLM2596%2526DCM%253Dyes%2526gclid%253DCj0KCQjws-OEBhCkARIsAPhOkIatRMRxvpGvEbnHPK70zLzYH-hPvPnoEBu_keLb09jnaif96hzVTssaAlA8EALw_wcB%2526gclsrc%253Daw.ds)
