@@ -14,13 +14,18 @@ ESP32 is connected to motorhome's internal network wirelessly.
     power consumption demands, but to also reduce amount of heat dissipated  
     from the microcontroller.  
     
- **Two ways to access UI and display data**  
+ **Three ways to access UI and display data**  
     
     1) Physical 3.5″ TFT LCD touch screen to display sensor data quickly when inside the motorhome.  
          
     2) Virtual user interface, which is accessed using browser and navigating to 192.168.0.68/  
        Software has hardcoded static IP address, eliminating the need to verify correct address when   
-       booting up the software.   
+       booting up the software.
+       
+    3) Smartphone application with custom dashboard as UI to see data on the go.
+       Project will consists the usage of Blynk application and API, to give easiest access 
+       to the sensor data when not near the motorhome.
+
  
  **HX711 Specifications** 
 
@@ -73,3 +78,8 @@ ESP32 is connected to motorhome's internal network wirelessly.
 [Display and BME280 sensor guide](https://www.youtube.com/watch?v=eI-4_QyVenw)  
 [BME280 technical specifications](https://nettigo.eu/products/module-pressure-humidity-and-temperature-sensor-bosch-bme280)  
 [LM2596 technical specifications and datasheet](https://www.ti.com/lit/ds/symlink/lm2596.pdf?ts=1620647119293&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FLM2596%253Futm_source%253Dgoogle%2526utm_medium%253Dcpc%2526utm_campaign%253Dapp-null-null-GPN_EN-cpc-pf-google-wwe%2526utm_content%253DLM2596%2526ds_k%253DLM2596%2526DCM%253Dyes%2526gclid%253DCj0KCQjws-OEBhCkARIsAPhOkIatRMRxvpGvEbnHPK70zLzYH-hPvPnoEBu_keLb09jnaif96hzVTssaAlA8EALw_wcB%2526gclsrc%253Daw.ds)
+
+
+**Future of the project**
+At this stage, project is still in the development phase, but there is plans to include gps-tracking  
+capabilities to see vehicles location in real-time.
