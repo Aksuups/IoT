@@ -63,8 +63,8 @@ HX711 scale;
 Adafruit_BME280 bme;
 
 // Network connection configuration.
-const char* ssid = "ARRIS-B9BA";
-const char* passwd = "D6BE18D1C13CCC4B";
+const char* ssid = "*****";
+const char* passwd = "*****";
 
 // Set static IP address for the ESP32.
 IPAddress local_ip(192, 168, 0, 68);
@@ -237,7 +237,7 @@ void loop(){
             client.println("<br>");
             client.println("<button class=\"button\" onClick=\"window.location.reload()\">Refresh</button>");         //Click-button for updating data.
             client.println("</div>");
-            client.println("<br><br><br><a href=\"https://github.com/Aksuups/IoT/tree/main/IoT/ESP32/Level%20tracker%20for%20gas%20bottles\">Projects Github page</a>");
+            client.println("<br><br><br><a href=\"https://github.com/Aksuups/IoT/tree/main/IoT/ESP32/MotorhomeSensorStatusMonitor\">Software Github page</a>");
             client.println("</body>");
             client.println("</html>");
             client.println();           // End HTTP response with blank line.
