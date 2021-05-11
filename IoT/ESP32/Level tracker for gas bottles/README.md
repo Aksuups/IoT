@@ -80,6 +80,6 @@ ESP32 is connected to motorhome's internal network wirelessly.
 [LM2596 technical specifications and datasheet](https://www.ti.com/lit/ds/symlink/lm2596.pdf?ts=1620647119293&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FLM2596%253Futm_source%253Dgoogle%2526utm_medium%253Dcpc%2526utm_campaign%253Dapp-null-null-GPN_EN-cpc-pf-google-wwe%2526utm_content%253DLM2596%2526ds_k%253DLM2596%2526DCM%253Dyes%2526gclid%253DCj0KCQjws-OEBhCkARIsAPhOkIatRMRxvpGvEbnHPK70zLzYH-hPvPnoEBu_keLb09jnaif96hzVTssaAlA8EALw_wcB%2526gclsrc%253Daw.ds)
 
 
-**Future of the project**
+**Future of the project**  
 At this stage, project is still in the development phase, but there is plans to include gps-tracking  
 capabilities to see vehicles location in real-time.
