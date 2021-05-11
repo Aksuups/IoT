@@ -1,11 +1,19 @@
-## Project for tracking motorhome gas tank levels using ESP32 microcontroller and HX711 Amp with load cells.  
+## Project for tracking motorhome gas tank levels using ESP32 microcontroller and HX711 Amp with load cells.
 
+Additionally ESP32 utilizes BME280-sensor to track humidity, pressure and temperature.  
+  
 Values from load cells are amplified using HX711 amplifier connected to ESP32.  
 Webserver is created locally inside ESP32.    
 ESP32 is connected to motorhome's internal network wirelessly.  
-
-User interface is accessed using browser and navigating to 192.168.0.68/ which is static IP address 
-assigned to the ESP32 microcontroller. 
+  
+    
+ **Two ways to access UI and display data**  
+    
+    1) Physical 3.5″ TFT LCD touch screen to display sensor data quickly when inside the motorhome.  
+         
+    2) Virtual user interface, which is accessed using browser and navigating to 192.168.0.68/  
+       Software has hardcoded static IP address, eliminating the need to verify correct address when   
+       booting up the software.   
  
  **HX711 Specifications** 
 
@@ -24,9 +32,36 @@ assigned to the ESP32 microcontroller.
             Quarter Wheatstone bridge = 1 cell
               Half Wheatstone bridge = 2 cells
               Full Wheatstone bridge = 4 cells
+ 
+ **BME280 Specifications**
+  
+    Operation range (full accuracy):
+        Pressure: 300...1100 hPa
+        Temperature: -40…85°C
+        
+    Interface: I2C and SPI
     
+    Average current consumption (1Hz data refresh rate):
+        1.8 μA @ 1 Hz (H, T)
+        2.8 μA @ 1 Hz (P, T)
+        3.6 μA @ 1 Hz (H, P, T)
+      
+    Average current consumption in sleep mode: 0.1 μA
+    
+    Humidity sensor:
+        Response time (τ63%): 1 s
+        Accuracy tolerance: ± 3 % relative humidity
+        Hysteresis: ≤ 2 % relative humidity
+        
+    Pressure sensor:
+        RMS Noise: 0.2 Pa (equiv. to 1.7 cm)
+        Sensitivity Error: ± 0.25 % (equiv. to 1 m at 400 m height change)
+        Temperature coefficient offset: ±1.5 Pa/K (equiv. to ±12.6 cm at 1°C temperature change)
+ 
+ 
 **Links:**  
 [Circuitjournal tutorial](https://circuitjournal.com/50kg-load-cells-with-HX711)  
 [Schematic by adamfk](https://easyeda.com/adamfk/hx711-module)  
 [HX711 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf)  
 [Display and BME280 sensor guide](https://www.youtube.com/watch?v=eI-4_QyVenw)
+[BME280 technical specifications](https://nettigo.eu/products/module-pressure-humidity-and-temperature-sensor-bosch-bme280)
