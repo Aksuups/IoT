@@ -1,6 +1,6 @@
 ## Project for tracking motorhome gas tank levels using ESP32 microcontroller and HX711 Amp with load cells.
 
-Additionally ESP32 utilizes BME280-sensor to track humidity, pressure and temperature.  
+Additionally ESP32 utilizes BME280-sensor to track pressure, humidity and temperature.  
   
 Values from load cells are amplified using HX711 amplifier connected to ESP32.  
 Webserver is created locally inside ESP32.    
@@ -63,5 +63,5 @@ ESP32 is connected to motorhome's internal network wirelessly.
 [Circuitjournal tutorial](https://circuitjournal.com/50kg-load-cells-with-HX711)  
 [Schematic by adamfk](https://easyeda.com/adamfk/hx711-module)  
 [HX711 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf)  
-[Display and BME280 sensor guide](https://www.youtube.com/watch?v=eI-4_QyVenw)
+[Display and BME280 sensor guide](https://www.youtube.com/watch?v=eI-4_QyVenw)  
 [BME280 technical specifications](https://nettigo.eu/products/module-pressure-humidity-and-temperature-sensor-bosch-bme280)
