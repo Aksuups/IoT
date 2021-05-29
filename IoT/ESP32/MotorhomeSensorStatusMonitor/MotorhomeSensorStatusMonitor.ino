@@ -45,6 +45,7 @@
 #include <SPI.h>
 #include <Adafruit_BME280.h>
 #include <Adafruit_Sensor.h>
+#include <BlynkSimpleEsp32.h>
 //#include "soc/rtc.h"
 
 // HX711 DT and SCK definitions. 
@@ -62,7 +63,8 @@ float data1, data2, temperature, humidity, pressure;
 HX711 scale;
 Adafruit_BME280 bme;
 
-// Network connection configuration.
+// Network and API connection configuration.
+const char* auth = "*****";
 const char* ssid = "*****";
 const char* passwd = "*****";
 
@@ -80,6 +82,14 @@ HTTPClient ask;
 // Server configuration.
 WiFiServer server(80);
 String header;
+
+void updateBlynk(){
+  Blynk.virtualWrite(V1, data1);
+  Blynk.virtualWrite(V2, data2);
+  Blynk.virtualWrite(V3, temperature);
+  Blynk.virtualWrite(V4, humidity);
+  Blynk.virtualWrite(V5, pressure);
+}
 
 void getData(){
   if (scale.is_ready()){
@@ -118,11 +128,13 @@ void getData(){
     Serial.println(" hPa");
     Serial.println();
   }
+  updateBlynk();
   delay(10000);
 }
 
 void setup(){
   Serial.begin(115200);
+  Blynk.begin(auth, ssid, passwd);
   if (!bme.begin(0x76)) { //Check if BME280 sensor is present.
     Serial.println("BME280 sensor not found.");
     while (1);
@@ -176,6 +188,7 @@ void setup(){
 }
 
 void loop(){
+  Blynk.run();                                                                  // Initialize Blynk connection.
   getData();
   WiFiClient client = server.available();
   if (client) {                             
