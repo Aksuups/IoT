@@ -1,0 +1,5 @@
+gastank1.txt="03.54"
+gastank2.txt="11.00"
+temperature.txt="22.53"
+pressure.txt="1013.24"
+humidity.txt="36.53"
