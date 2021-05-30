@@ -83,6 +83,42 @@ HTTPClient ask;
 WiFiServer server(80);
 String header;
 
+void sendGasTank1ToNextion(){
+  String command = "gastank1.txt=\""+String(data1,2)+"\"";
+  Serial.print(command);
+  endNextionCommand();
+}
+
+void sendGasTank2ToNextion(){
+  String command = "gastank2.txt=\""+String(data2,2)+"\"";
+  Serial.print(command);
+  endNextionCommand();
+}
+
+void sendHumidityToNextion(){
+  String command = "humidity.txt=\""+String(humidity,2)+"\"";
+  Serial.print(command);
+  endNextionCommand();
+}
+
+void sendTemperatureToNextion(){
+  String command = "temperature.txt=\""+String(temperature,2)+"\"";
+  Serial.print(command);
+  endNextionCommand();
+}
+
+void sendPressureToNextion(){
+  String command = "pressure.txt=\""+String(pressure,2)+"\"";
+  Serial.print(command);
+  endNextionCommand();
+}
+
+void endNextionCommand(){
+  Serial.write(0xff);
+  Serial.write(0xff);
+  Serial.write(0xff);
+} 
+
 void updateBlynk(){
   Blynk.virtualWrite(V1, data1);
   Blynk.virtualWrite(V2, data2);
@@ -129,11 +165,17 @@ void getData(){
     Serial.println();
   }
   updateBlynk();
+  endNextionCommand();
+  sendGasTank1ToNextion();
+  sendGasTank2ToNextion();
+  sendTemperatureToNextion();
+  sendHumidityToNextion();
+  sendPressureToNextion();
   delay(10000);
 }
 
 void setup(){
-  Serial.begin(115200);
+  Serial.begin(9600);
   Blynk.begin(auth, ssid, passwd);
   if (!bme.begin(0x76)) { //Check if BME280 sensor is present.
     Serial.println("BME280 sensor not found.");
