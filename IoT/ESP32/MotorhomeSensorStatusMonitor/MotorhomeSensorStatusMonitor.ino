@@ -132,7 +132,7 @@ void getData(){
     data1 = random(10, 1100) / 100.0; // DEBUG (Sensor not connected to ESP32)
     data2 = random(10, 1100) / 100.0; // DEBUG (Sensor not connected to ESP32)
     //data = scale.read();
-    Serial.print("Tank 1: ");
+    Serial.print("\nTank 1: ");
     Serial.print(data1);
     Serial.println(" kg");
     Serial.print("Tank 2: ");
@@ -143,7 +143,7 @@ void getData(){
   {
     data1 = random(10, 1100) / 100.0; // DEBUG (Sensor not connected to ESP32)
     data2 = random(10, 1100) / 100.0; // DEBUG (Sensor not connected to ESP32)
-    Serial.print("Tank 1: ");
+    Serial.print("\nTank 1: ");
     Serial.print(data1);
     Serial.println(" kg");
     Serial.print("Tank 2: ");
@@ -176,6 +176,7 @@ void getData(){
 
 void setup(){
   Serial.begin(9600);
+  //Initialize connection to BlynkAPI.
   Blynk.begin(auth, ssid, passwd);
   if (!bme.begin(0x76)) { //Check if BME280 sensor is present.
     Serial.println("BME280 sensor not found.");
