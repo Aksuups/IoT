@@ -46,7 +46,7 @@
 #include <Adafruit_BME280.h>
 #include <Adafruit_Sensor.h>
 #include <BlynkSimpleEsp32.h>
-//#include "soc/rtc.h"
+//#include "soc/rtc.h"  //Likely to be removed competely. 
 
 // HX711 DT and SCK definitions. 
 #define DOUT_PIN 26
@@ -59,7 +59,7 @@ unsigned long previousTime = 0;
 const long timeoutTime = 2000; 
 float data1, data2, temperature, humidity, pressure;
 
-// Initialize HX711 LC amplifier.
+// Initialize HX711 LC amplifier and BME280-sensor.
 HX711 scale;
 Adafruit_BME280 bme;
 
@@ -70,9 +70,9 @@ const char* passwd = "*****";
 
 // Set static IP address for the ESP32.
 IPAddress local_ip(192, 168, 0, 68);
-IPAddress gateway(192, 168, 0, 1); // Defaults to the device IP address with the last octet set to 1
+IPAddress gateway(192, 168, 0, 1); // Defaults to the device IP address with the last octet set to 1.
 IPAddress subnet(255, 255, 255, 0);
-IPAddress dns(8, 8, 8, 8); // Google's Public DNS, Secondary: 8.8.4.4 
+IPAddress dns(8, 8, 8, 8);         // Google's Public DNS, Secondary: 8.8.4.4.
 
 // Initialize connection.
 WiFiClient client;
@@ -83,6 +83,7 @@ HTTPClient ask;
 WiFiServer server(80);
 String header;
 
+//Functions to send data from microcontroller to the nextion display. 
 void sendGasTank1ToNextion(){
   String command = "gastank1.txt=\""+String(data1,2)+"\"";
   Serial.print(command);
@@ -196,7 +197,7 @@ void setup(){
   //rtc_clk_cpu_freq_set(RTC_CPU_FREQ_80M); // Adjust ESP32 clock rate frequency to the timing of the HX711 (80MHz).
   scale.begin(DOUT_PIN, SCK_PIN);
 
-  //Apply IP address, gateway and subnet mask defined in configuration.
+  // Apply IP address, gateway and subnet mask defined in configuration.
   WiFi.config(local_ip, gateway, subnet);
 
   // Initialize Access Point mode for ESP32.
