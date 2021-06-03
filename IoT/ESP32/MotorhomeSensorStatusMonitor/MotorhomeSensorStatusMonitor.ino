@@ -23,7 +23,8 @@
 unsigned long currentTime = millis();
 unsigned long previousTime = 0;
 const long timeoutTime = 2000; 
-float data1, data2, temperature, humidity, pressure;
+float gastank1, gastank2, temperature, humidity, pressure;
+float data1_var = 7.50;
 
 // Initialize HX711 LC amplifier and BME280-sensor.
 HX711 scale;
@@ -46,13 +47,13 @@ WiFiMulti WiFiMulti;
 
 //Functions to send data from microcontroller to the nextion display. 
 void sendGasTank1ToNextion(){
-  String command = "gastank1.txt=\""+String(data1,2)+"\"";
+  String command = "gastank1.txt=\""+String(gastank1,2)+"\"";
   Serial.print(command);
   endNextionCommand();
 }
 
 void sendGasTank2ToNextion(){
-  String command = "gastank2.txt=\""+String(data2,2)+"\"";
+  String command = "gastank2.txt=\""+String(gastank2,2)+"\"";
   Serial.print(command);
   endNextionCommand();
 }
@@ -82,8 +83,8 @@ void endNextionCommand(){
 } 
 
 void updateBlynk(){
-  Blynk.virtualWrite(V1, data1);
-  Blynk.virtualWrite(V2, data2);
+  Blynk.virtualWrite(V1, gastank1);
+  Blynk.virtualWrite(V2, gastank2);
   Blynk.virtualWrite(V3, temperature);
   Blynk.virtualWrite(V4, humidity);
   Blynk.virtualWrite(V5, pressure);
@@ -92,13 +93,14 @@ void updateBlynk(){
 void getData(){
 
   //data = scale.read();
-  data1 = random(10, 1100) / 100.0; //Use random values.
-  data2 = random(10, 1100) / 100.0;
+  gastank1 = data1_var;
+  data1_var = data1_var - 0.01;
+  gastank2 = 11.00;
   Serial.print("\nTank 1: ");
-  Serial.print(data1);
+  Serial.print(gastank1);
   Serial.println(" kg");
   Serial.print("Tank 2: ");
-  Serial.print(data2);
+  Serial.print(gastank2);
   Serial.println(" kg");
 
   temperature = bme.readTemperature();
