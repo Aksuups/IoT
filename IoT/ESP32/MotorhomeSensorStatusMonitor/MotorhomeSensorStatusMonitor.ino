@@ -1,12 +1,11 @@
-/*
- * ------------------------------------------------------------------------ *
- *  Source code for displaying motorhome gas bottle levels using locally    *
- *  created server, which can be accessed through web browser.              *
+/* ------------------------------------------------------------------------ *
+ *  Motorhome sensor monitor                                                *
+ *  Tracks gas left on tanks, ambient temperature, pressure and             *
+ *  relative humidity.                                                      *
  *  ----------------------------------------------------------------------- *
  *  Developed by Aleksi Jokinen © 2021                                      *
  *  https://www.github.com/Aksuups                                          *
- * ------------------------------------------------------------------------ *
-*/
+ * ------------------------------------------------------------------------ */
 #include <WiFi.h>
 #include <WiFiMulti.h>
 #include <HX711.h>
