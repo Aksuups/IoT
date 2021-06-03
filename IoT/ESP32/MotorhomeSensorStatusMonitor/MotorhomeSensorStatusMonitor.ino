@@ -20,9 +20,6 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 // Define global variables.
-//unsigned long currentTime = millis();
-//unsigned long previousTime = 0;
-//const long timeoutTime = 2000; 
 float gastank1, gastank2, temperature, humidity, pressure, volts, tmp36_temperature;
 float data1_var = 7.50;
 const int tmp36Pin = 36; // Analog input pin for the TMP36-sensor.
@@ -79,12 +76,6 @@ void sendOUTSIDETemperatureToNextion(){
   endNextionCommand();
 }
 
-void sendPressureToNextion(){
-  String command = "pressure.txt=\""+String(pressure,2)+"\"";
-  Serial.print(command);
-  endNextionCommand();
-}
-
 void endNextionCommand(){
   Serial.write(0xff);
   Serial.write(0xff);
@@ -101,10 +92,12 @@ void updateBlynk(){
 
 void getData(){
 
-  //data = scale.read();
+  //gastank1 = scale.read();
+
+  //Calculate temperature for TMP36-sensor
   tmpVal = analogRead(tmp36Pin);
   volts = tmpVal/1023.0;
-  tmp36_temperature = (volts - 0.5) * 100; // Calculate temperature from voltage.
+  tmp36_temperature = (volts - 0.5) * 100;
 
   gastank1 = data1_var;
   data1_var = data1_var - 0.01;
@@ -118,7 +111,6 @@ void getData(){
 
   temperature = bme.readTemperature();
   humidity = bme.readHumidity();
-  pressure = bme.readPressure() / 100.0F;
   Serial.print("Temperature IN: "); 
   Serial.print(temperature);
   Serial.println(" °C");
@@ -128,9 +120,6 @@ void getData(){
   Serial.print("Humidity: ");
   Serial.print(humidity);
   Serial.println(" %");
-  Serial.print("Pressure: ");
-  Serial.print(pressure);
-  Serial.println(" hPa");
   Serial.println();
 
   updateBlynk();
@@ -140,7 +129,6 @@ void getData(){
   sendINSIDETemperatureToNextion();
   sendOUTSIDETemperatureToNextion();
   sendHumidityToNextion();
-  sendPressureToNextion();
   Serial.println();
   delay(10000);
 }
