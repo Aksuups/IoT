@@ -20,11 +20,14 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 // Define global variables.
-unsigned long currentTime = millis();
-unsigned long previousTime = 0;
-const long timeoutTime = 2000; 
-float gastank1, gastank2, temperature, humidity, pressure;
+//unsigned long currentTime = millis();
+//unsigned long previousTime = 0;
+//const long timeoutTime = 2000; 
+float gastank1, gastank2, temperature, humidity, pressure, volts, tmp36_temperature;
 float data1_var = 7.50;
+const int tmp36Pin = 36; // Analog input pin for the TMP36-sensor.
+int tmpVal; // Raw readings from the tmp36-sensor.
+
 
 // Initialize HX711 LC amplifier and BME280-sensor.
 HX711 scale;
@@ -64,8 +67,14 @@ void sendHumidityToNextion(){
   endNextionCommand();
 }
 
-void sendTemperatureToNextion(){
-  String command = "temperature.txt=\""+String(temperature,2)+"\"";
+void sendINSIDETemperatureToNextion(){
+  String command = "INtemperature.txt=\""+String(temperature,2)+"\"";
+  Serial.print(command);
+  endNextionCommand();
+}
+
+void sendOUTSIDETemperatureToNextion(){
+  String command = "OUTtemperature.txt=\""+String(tmp36_temperature,2)+"\"";
   Serial.print(command);
   endNextionCommand();
 }
@@ -87,12 +96,16 @@ void updateBlynk(){
   Blynk.virtualWrite(V2, gastank2);
   Blynk.virtualWrite(V3, temperature);
   Blynk.virtualWrite(V4, humidity);
-  Blynk.virtualWrite(V5, pressure);
+  Blynk.virtualWrite(V5, tmp36_temperature);
 }
 
 void getData(){
 
   //data = scale.read();
+  tmpVal = analogRead(tmp36Pin);
+  volts = tmpVal/1023.0;
+  tmp36_temperature = (volts - 0.5) * 100; // Calculate temperature from voltage.
+
   gastank1 = data1_var;
   data1_var = data1_var - 0.01;
   gastank2 = 11.00;
@@ -106,8 +119,11 @@ void getData(){
   temperature = bme.readTemperature();
   humidity = bme.readHumidity();
   pressure = bme.readPressure() / 100.0F;
-  Serial.print("Temperature: "); 
+  Serial.print("Temperature IN: "); 
   Serial.print(temperature);
+  Serial.println(" °C");
+  Serial.print("Temperature OUT: "); 
+  Serial.print(tmp36_temperature);
   Serial.println(" °C");
   Serial.print("Humidity: ");
   Serial.print(humidity);
@@ -121,7 +137,8 @@ void getData(){
   endNextionCommand();
   sendGasTank1ToNextion();
   sendGasTank2ToNextion();
-  sendTemperatureToNextion();
+  sendINSIDETemperatureToNextion();
+  sendOUTSIDETemperatureToNextion();
   sendHumidityToNextion();
   sendPressureToNextion();
   Serial.println();
