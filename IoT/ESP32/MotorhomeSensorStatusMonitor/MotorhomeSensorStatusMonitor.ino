@@ -23,7 +23,7 @@
 float gastank1, gastank2, temperature, humidity, pressure, volts, tmp36_temperature;
 float data1_var = 7.50;
 const int tmp36Pin = 36; // Analog input pin for the TMP36-sensor.
-int tmpVal; // Raw readings from the tmp36-sensor.
+int tmpVal, gastank1_bar, gastank2_bar; // Raw readings from the tmp36-sensor.
 
 
 // Initialize HX711 LC amplifier and BME280-sensor.
@@ -48,6 +48,18 @@ WiFiMulti WiFiMulti;
 //Functions to send data from microcontroller to the nextion display. 
 void sendGasTank1ToNextion(){
   String command = "gastank1.txt=\""+String(gastank1,2)+"\"";
+  Serial.print(command);
+  endNextionCommand();
+}
+
+void sendGasTank1BarToNextion(){
+  String command = "gastank1_bar.val="+String(gastank1_bar);
+  Serial.print(command);
+  endNextionCommand();
+}
+
+void sendGasTank2BarToNextion(){
+  String command = "gastank2_bar.val="+String(gastank2_bar);
   Serial.print(command);
   endNextionCommand();
 }
@@ -101,7 +113,9 @@ void getData(){
 
   gastank1 = data1_var;
   data1_var = data1_var - 0.01;
+  gastank1_bar = gastank1 * 9.0909090909090909090909090909091;
   gastank2 = 11.00;
+  gastank2_bar = gastank2 * 9.0909090909090909090909090909091;
   Serial.print("\nTank 1: ");
   Serial.print(gastank1);
   Serial.println(" kg");
@@ -125,7 +139,9 @@ void getData(){
   updateBlynk();
   endNextionCommand();
   sendGasTank1ToNextion();
+  sendGasTank1BarToNextion();
   sendGasTank2ToNextion();
+  sendGasTank2BarToNextion();
   sendINSIDETemperatureToNextion();
   sendOUTSIDETemperatureToNextion();
   sendHumidityToNextion();
