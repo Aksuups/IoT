@@ -1,10 +1,11 @@
 ## Project for tracking motorhome gas tank levels using ESP32 microcontroller and HX711 Amp with load cells.
 
-Additionally ESP32 utilizes BME280-sensor to track pressure, humidity and temperature.  
+Additionally ESP32 utilizes BME280-sensor to track relative humidity and temperature inside the motorhome, and
+TMP36-sensor to track outside temperature.
   
 Values from load cells are amplified using HX711 amplifier connected to ESP32.  
-Webserver is created locally inside ESP32.    
-ESP32 is connected to motorhome's internal network wirelessly.  
+~~Webserver is created locally inside ESP32.
+ESP32 is connected to motorhome's internal network wirelessly.~~
 
  **Powering microcontroller and components**
     
@@ -14,15 +15,11 @@ ESP32 is connected to motorhome's internal network wirelessly.
     power consumption demands, but to also reduce amount of heat dissipated  
     from the microcontroller.  
     
- **Three ways to access UI and display data**  
+ **Two ways to access UI and display data**  
     
     1) Physical 3.5″ TFT LCD touch screen to display sensor data quickly when inside the motorhome.  
-         
-    2) Virtual user interface, which is accessed using browser and navigating to 192.168.0.68/  
-       Software has hardcoded static IP address, eliminating the need to verify correct address when   
-       booting up the software.
        
-    3) Smartphone application with custom dashboard as UI to see data on the go.
+    2) Smartphone application with custom dashboard as UI to see data on the go.
        Project will consists the usage of Blynk application and API, to give easiest access 
        to the sensor data when not near the motorhome.
 
