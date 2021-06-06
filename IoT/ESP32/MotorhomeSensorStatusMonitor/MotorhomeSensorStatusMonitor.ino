@@ -17,7 +17,7 @@
 // HX711 DT and SCK definitions. 
 #define LOADCELL_DOUT_PIN 33
 #define LOADCELL_SCK_PIN 32
-#define CALIBRATION_FACTOR 7050.0
+#define CALIBRATION_FACTOR 100000.0 // This value needs to be determined. 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 // Define global variables.
