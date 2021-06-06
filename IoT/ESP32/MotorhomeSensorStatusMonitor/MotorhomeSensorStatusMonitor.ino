@@ -33,9 +33,9 @@ HX711 scale;
 Adafruit_BME280 bme;
 
 // Network and API connection configuration.
-const char* auth = "9hWOddtQIGNjZYSitX3XEAVBI7MWG2J-";
-const char* ssid = "ARRIS-B9BA";
-const char* passwd = "D6BE18D1C13CCC4B";
+const char* auth = "*****";
+const char* ssid = "*****";
+const char* passwd = "*****";
 
 
 // Set static IP address for the ESP32.
