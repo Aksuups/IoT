@@ -15,8 +15,9 @@
 #include <BlynkSimpleEsp32.h>
 
 // HX711 DT and SCK definitions. 
-#define DOUT_PIN 26
-#define SCK_PIN 25
+#define LOADCELL_DOUT_PIN 33
+#define LOADCELL_SCK_PIN 32
+#define CALIBRATION_FACTOR 7050.0
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 // Define global variables.
@@ -26,14 +27,15 @@ const int tmp36Pin = 36; // Analog input pin for the TMP36-sensor.
 int tmpVal, gastank1_bar, gastank2_bar; // Raw readings from the tmp36-sensor.
 
 
-// Initialize HX711 LC amplifier and BME280-sensor.
+// Init HX711 LC Amplifier.
 HX711 scale;
+// Init BME280-sensor.
 Adafruit_BME280 bme;
 
 // Network and API connection configuration.
-const char* auth = "*****";
-const char* ssid = "*****";
-const char* passwd = "*****";
+const char* auth = "9hWOddtQIGNjZYSitX3XEAVBI7MWG2J-";
+const char* ssid = "ARRIS-B9BA";
+const char* passwd = "D6BE18D1C13CCC4B";
 
 
 // Set static IP address for the ESP32.
@@ -58,14 +60,14 @@ void sendGasTank1BarToNextion(){
   endNextionCommand();
 }
 
-void sendGasTank2BarToNextion(){
-  String command = "gastank2_bar.val="+String(gastank2_bar);
+void sendGasTank2ToNextion(){
+  String command = "gastank2.txt=\""+String(gastank2,2)+"\"";
   Serial.print(command);
   endNextionCommand();
 }
 
-void sendGasTank2ToNextion(){
-  String command = "gastank2.txt=\""+String(gastank2,2)+"\"";
+void sendGasTank2BarToNextion(){
+  String command = "gastank2_bar.val="+String(gastank2_bar);
   Serial.print(command);
   endNextionCommand();
 }
@@ -104,7 +106,8 @@ void updateBlynk(){
 
 void getData(){
 
-  //gastank1 = scale.read();
+  scale.set_scale(CALIBRATION_FACTOR);
+  gastank2 = scale.get_units(), 2;
 
   //Calculate temperature for TMP36-sensor
   tmpVal = analogRead(tmp36Pin);
@@ -114,7 +117,7 @@ void getData(){
   gastank1 = data1_var;
   data1_var = data1_var - 0.01;
   gastank1_bar = gastank1 * 9.0909090909090909090909090909091;
-  gastank2 = 11.00;
+  //gastank2 = 11.00;
   gastank2_bar = gastank2 * 9.0909090909090909090909090909091;
   Serial.print("\nTank 1: ");
   Serial.print(gastank1);
@@ -158,8 +161,10 @@ void setup(){
   Blynk.begin(auth, ssid, passwd);
 
   // Initialize scale (HX711, load cells).
-  scale.begin(DOUT_PIN, SCK_PIN);
- 
+  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+  scale.set_scale();
+  scale.tare(); //Assuming no weight on the cell.
+  
   //Initiliaze BME sensor, if it is present.
   if (!bme.begin(0x76)) { 
     Serial.println("\nBME280 sensor not found.");
