@@ -39,10 +39,10 @@ ESP32 is connected to motorhome's internal network wirelessly.~~
 	White -> Output (+) -> HX711 A+
 	Black -> Output (-) -> HX711 A-
 
-    ~~Type: Strain gauge
+    Type: Strain gauge
     Accuracy: ±0.05% (50kg x 0.0005 = 0.025kg -> ±25g)
     Wires: Three wires (Red, white, green)
-    Maximum weight: 50.00kg (per cell, 200.00kg total)
+    ~~Maximum weight: 50.00kg (per cell, 200.00kg total)
     Wiring: Can be wired to Amp using 1, 2, or 4 cell configuration
             Quarter Wheatstone bridge = 1 cell
               Half Wheatstone bridge = 2 cells
