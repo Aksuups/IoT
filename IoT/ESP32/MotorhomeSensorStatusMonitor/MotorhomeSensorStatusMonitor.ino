@@ -15,9 +15,9 @@
 #include <BlynkSimpleEsp32.h>
 
 // HX711 DT and SCK definitions. 
-#define LOADCELL_DOUT_PIN 33
-#define LOADCELL_SCK_PIN 32
-#define CALIBRATION_FACTOR 100000.0 // This value needs to be determined. 
+#define LOADCELL_DOUT_PIN 5
+#define LOADCELL_SCK_PIN 18
+#define CALIBRATION_FACTOR 50500.00 // This value needs to be determined. 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 // Define global variables.
@@ -36,7 +36,6 @@ Adafruit_BME280 bme;
 const char* auth = "*****";
 const char* ssid = "*****";
 const char* passwd = "*****";
-
 
 // Set static IP address for the ESP32.
 IPAddress local_ip(192, 168, 0, 68);
@@ -106,8 +105,10 @@ void updateBlynk(){
 
 void getData(){
 
-  scale.set_scale(CALIBRATION_FACTOR);
-  gastank2 = scale.get_units(), 2;
+  gastank2 = scale.get_units()*0.453592, 3;
+  if (gastank2 < 0.00){
+    gastank2 = 0.00;
+  }
 
   //Calculate temperature for TMP36-sensor
   tmpVal = analogRead(tmp36Pin);
@@ -162,9 +163,9 @@ void setup(){
 
   // Initialize scale (HX711, load cells).
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
-  scale.set_scale();
-  scale.tare(); //Assuming no weight on the cell.
-  
+  scale.set_scale(CALIBRATION_FACTOR);
+  scale.set_offset(10500);
+
   //Initiliaze BME sensor, if it is present.
   if (!bme.begin(0x76)) { 
     Serial.println("\nBME280 sensor not found.");
