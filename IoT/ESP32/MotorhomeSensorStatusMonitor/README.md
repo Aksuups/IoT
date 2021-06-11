@@ -33,14 +33,20 @@ ESP32 is connected to motorhome's internal network wirelessly.~~
    
  **Load cell Specifications** 
 
-    Type: Strain gauge
+    Wiring (from manufacturer):
+	Red   -> Power  (+) -> HX711 E+  
+	Green -> Power  (-) -> HX711 E-
+	White -> Output (+) -> HX711 A+
+	Black -> Output (-) -> HX711 A-
+
+    ~~Type: Strain gauge
     Accuracy: ±0.05% (50kg x 0.0005 = 0.025kg -> ±25g)
     Wires: Three wires (Red, white, green)
     Maximum weight: 50.00kg (per cell, 200.00kg total)
     Wiring: Can be wired to Amp using 1, 2, or 4 cell configuration
             Quarter Wheatstone bridge = 1 cell
               Half Wheatstone bridge = 2 cells
-              Full Wheatstone bridge = 4 cells
+              Full Wheatstone bridge = 4 cells~~
  
  **BME280 Specifications**
   
@@ -69,14 +75,14 @@ ESP32 is connected to motorhome's internal network wirelessly.~~
  
  
 **Links:**  
-[Circuitjournal tutorial](https://circuitjournal.com/50kg-load-cells-with-HX711)  
+[Circuitjournal loadcell hookup](https://circuitjournal.com/50kg-load-cells-with-HX711)  
 [Schematic by adamfk](https://easyeda.com/adamfk/hx711-module)  
 [HX711 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf)  
 [Display and BME280 sensor guide](https://www.youtube.com/watch?v=eI-4_QyVenw)  
 [BME280 technical specifications](https://nettigo.eu/products/module-pressure-humidity-and-temperature-sensor-bosch-bme280)  
 [LM2596 technical specifications and datasheet](https://www.ti.com/lit/ds/symlink/lm2596.pdf?ts=1620647119293&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FLM2596%253Futm_source%253Dgoogle%2526utm_medium%253Dcpc%2526utm_campaign%253Dapp-null-null-GPN_EN-cpc-pf-google-wwe%2526utm_content%253DLM2596%2526ds_k%253DLM2596%2526DCM%253Dyes%2526gclid%253DCj0KCQjws-OEBhCkARIsAPhOkIatRMRxvpGvEbnHPK70zLzYH-hPvPnoEBu_keLb09jnaif96hzVTssaAlA8EALw_wcB%2526gclsrc%253Daw.ds)   
 [Sending and storing values from nextion to arduino](https://seithan.com/nextion-projects/send-values-store-them-on-arduino/)
-
+[Circuitjournal loadcell hookup2](https://circuitjournal.com/four-wire-load-cell-with-HX711)
 
 **Future of the project**  
 At this stage, project is still in the development phase, but there is plans to include gps-tracking  
