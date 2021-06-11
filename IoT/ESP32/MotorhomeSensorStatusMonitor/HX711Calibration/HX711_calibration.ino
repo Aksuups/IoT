@@ -38,7 +38,7 @@ The HX711 board can be powered from 2.7V to 5V so the Arduino 5V power should be
 
 HX711 scale;
 
-float calibration_factor = 70400.00; //-7050 worked for my 440lb max scale setup
+float calibration_factor = 50500.00; //-7050 worked for my 440lb max scale setup
 
 void setup() {
 Serial.begin(9600);
@@ -50,22 +50,20 @@ Serial.println("Press - or z to decrease calibration factor");
 
 scale.begin(DOUT, CLK);
 scale.set_scale();
-scale.tare(); //Reset the scale to 0
-
-long zero_factor = scale.read_average(); //Get a baseline reading
-Serial.print("Zero factor: "); //This can be used to remove the need to tare the scale. Useful in permanent scale projects.
-Serial.println(zero_factor);
 }
 
 void loop() {
 
 scale.set_scale(calibration_factor); //Adjust to this calibration factor
+scale.set_offset(11000);
 
 Serial.print("Reading: ");
 Serial.print(scale.get_units()*0.453592, 3);
 Serial.print(" kg"); //Change this to kg and re-adjust the calibration factor if you follow SI units like a sane person
 Serial.print(" calibration_factor: ");
 Serial.print(calibration_factor);
+Serial.print(" Offset: ");
+Serial.print(scale.read_average());;
 Serial.println();
 delay(100);
 
