@@ -38,8 +38,8 @@ const char* ssid = "*****";
 const char* passwd = "*****";
 
 // Set static IP address for the ESP32.
-IPAddress local_ip(192, 168, 0, 68);
-IPAddress gateway(192, 168, 0, 1); // Defaults to the device IP address with the last octet set to 1.
+IPAddress local_ip(192, 168, 100, 68);
+IPAddress gateway(192, 168, 100, 1); // Defaults to the device IP address with the last octet set to 1.
 IPAddress subnet(255, 255, 255, 0);
 IPAddress dns(8, 8, 8, 8);         // Google's Public DNS, Secondary: 8.8.4.4.
 
@@ -112,7 +112,7 @@ void getData(){
 
   //Calculate temperature for TMP36-sensor
   tmpVal = analogRead(tmp36Pin);
-  volts = tmpVal/1023.0;
+  volts = tmpVal/1024.0;
   tmp36_temperature = (volts - 0.5) * 100;
 
   gastank1 = data1_var;
@@ -164,7 +164,7 @@ void setup(){
   // Initialize scale (HX711, load cells).
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
   scale.set_scale(CALIBRATION_FACTOR);
-  scale.set_offset(10500);
+  scale.set_offset(1100);
 
   //Initiliaze BME sensor, if it is present.
   if (!bme.begin(0x76)) { 
