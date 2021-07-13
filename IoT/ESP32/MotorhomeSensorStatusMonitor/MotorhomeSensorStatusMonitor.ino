@@ -164,7 +164,7 @@ void setup(){
   // Initialize scale (HX711, load cells).
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
   scale.set_scale(CALIBRATION_FACTOR);
-  scale.set_offset(1100);
+  scale.set_offset(11000);
 
   //Initiliaze BME sensor, if it is present.
   if (!bme.begin(0x76)) { 
