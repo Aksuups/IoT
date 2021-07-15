@@ -13,6 +13,7 @@
 #include <Adafruit_BME280.h>
 #include <Adafruit_Sensor.h>
 #include <BlynkSimpleEsp32.h>
+#include <Nextion.h>
 
 // HX711 DT and SCK definitions. 
 #define LOADCELL_DOUT_PIN 5
@@ -25,6 +26,14 @@ float gastank1, gastank2, temperature, humidity, pressure, volts, tmp36_temperat
 float data1_var = 7.50;
 const int tmp36Pin = 36; // Analog input pin for the TMP36-sensor.
 int tmpVal, gastank1_bar, gastank2_bar; // Raw readings from the tmp36-sensor.
+
+/*  Nextion parameters: 
+    page1
+    gastank1_val, id14, set- -> b2, set+ -> b3
+    gastank2_val, id15, set- -> b4, set+ -> b5
+    Nextion RX on ESP32 -> GPIO 1 / TX0
+*/
+int gastank1_weight, gastank2_weight;
 
 
 // Init HX711 LC Amplifier.
@@ -89,6 +98,12 @@ void sendOUTSIDETemperatureToNextion(){
   endNextionCommand();
 }
 
+void receiveGastank1_weight(){
+}
+
+void receiveGastank2_weight(){
+}
+
 void endNextionCommand(){
   Serial.write(0xff);
   Serial.write(0xff);
@@ -118,7 +133,6 @@ void getData(){
   gastank1 = data1_var;
   data1_var = data1_var - 0.01;
   gastank1_bar = gastank1 * 9.0909090909090909090909090909091;
-  //gastank2 = 11.00;
   gastank2_bar = gastank2 * 9.0909090909090909090909090909091;
   Serial.print("\nTank 1: ");
   Serial.print(gastank1);
@@ -139,6 +153,10 @@ void getData(){
   Serial.print(humidity);
   Serial.println(" %");
   Serial.println();
+  Serial.print("Gastank1 set weight: ");
+  Serial.println();
+  Serial.print("Gastank2 set weight: ");
+  Serial.println();
 
   updateBlynk();
   endNextionCommand();
@@ -149,6 +167,8 @@ void getData(){
   sendINSIDETemperatureToNextion();
   sendOUTSIDETemperatureToNextion();
   sendHumidityToNextion();
+  receiveGastank1_weight();
+  receiveGastank2_weight();
   Serial.println();
   delay(10000);
 }
