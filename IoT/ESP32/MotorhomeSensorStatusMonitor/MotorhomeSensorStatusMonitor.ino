@@ -11,7 +11,6 @@
 #include <HX711.h>
 #include <SPI.h>
 #include <Adafruit_BME280.h>
-#include <Adafruit_BMP280.h> //For the BMP280-sensor (measuring outside temperature)
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <BlynkSimpleEsp32.h>
@@ -27,7 +26,8 @@
 // Define global variables.
 float gastank1, gastank2, temperature, humidity, pressure, volts, outsideTemperature;
 float data1_var = 7.50;
-int gastank1_bar, gastank2_bar; 
+int gastank1_bar, gastank2_bar, tmpVal;
+const int tmp36Pin = 36; 
 
 /*  Nextion parameters: 
     page1
@@ -42,10 +42,7 @@ int gastank1_weight, gastank2_weight;
 HX711 scale;
 
 // Init BME280-sensor.
-Adafruit_BME280 bme1;
-
-// Init BMP280-sensor.
-Adafruit_BME280 bme2;
+Adafruit_BME280 bme;
 
 // Network and API connection configuration.
 const char* auth = "*****";
@@ -105,9 +102,11 @@ void sendOUTSIDETemperatureToNextion(){
 }
 
 void receiveGastank1_weight(){
+  //TODO: Implement
 }
 
 void receiveGastank2_weight(){
+  //TODO: Implement
 }
 
 void endNextionCommand(){
@@ -142,12 +141,15 @@ void getData(){
   Serial.print(gastank2);
   Serial.println(" kg");
 
-  // Calculate data for BMP280-sensor.
-  outsideTemperature = bme2.readTemperature();
+    //Calculate temperature for TMP36-sensor
+  tmpVal = analogRead(tmp36Pin);
+  volts = tmpVal/1024.0;
+  outsideTemperature = (volts - 0.5) * 100;
+  
 
   // Calculate data for BME280-sensor.
-  temperature = bme1.readTemperature();
-  humidity = bme1.readHumidity();
+  temperature = bme.readTemperature();
+  humidity = bme.readHumidity();
   Serial.print("Temperature IN: "); 
   Serial.print(temperature);
   Serial.println(" °C");
@@ -192,7 +194,7 @@ void setup(){
   scale.set_offset(11000);
 
   // Initiliaze BME sensor. Give error if not found in address 76.
-  if (!bme1.begin(0x76)){ 
+  if (!bme.begin(0x76)){ 
     Serial.println("\nBME280-sensor not found.");
     while(1);
     }
