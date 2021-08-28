@@ -11,21 +11,25 @@
 #include <HX711.h>
 #include <SPI.h>
 #include <Adafruit_BME280.h>
+#include <SparkFunBME280.h> //For the BMP280-sensor (measuring outside temperature)
+#include <SoftwareWire.h>
 #include <Adafruit_Sensor.h>
 #include <BlynkSimpleEsp32.h>
-#include <Nextion.h>
+//#include <Nextion.h>
 
 // HX711 DT and SCK definitions. 
 #define LOADCELL_DOUT_PIN 5
 #define LOADCELL_SCK_PIN 18
+
+SoftwareWire myWire(36, 39); //SDA, SCL
+
 #define CALIBRATION_FACTOR 50500.00 // This value needs to be determined. 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 // Define global variables.
-float gastank1, gastank2, temperature, humidity, pressure, volts, tmp36_temperature;
+float gastank1, gastank2, temperature, humidity, pressure, volts, outsideTemperature;
 float data1_var = 7.50;
-const int tmp36Pin = 36; // Analog input pin for the TMP36-sensor.
-int tmpVal, gastank1_bar, gastank2_bar; // Raw readings from the tmp36-sensor.
+int gastank1_bar, gastank2_bar; 
 
 /*  Nextion parameters: 
     page1
@@ -40,11 +44,13 @@ int gastank1_weight, gastank2_weight;
 HX711 scale;
 // Init BME280-sensor.
 Adafruit_BME280 bme;
+// Initialize BMP280-sensor.
+BME280 bmp280;
 
 // Network and API connection configuration.
-const char* auth = "*****";
-const char* ssid = "*****";
-const char* passwd = "*****";
+const char* auth = "9hWOddtQIGNjZYSitX3XEAVBI7MWG2J-";
+const char* ssid = "Searching...";
+const char* passwd = "4tP5ntY5";
 
 // Set static IP address for the ESP32.
 IPAddress local_ip(192, 168, 100, 68);
@@ -55,7 +61,7 @@ IPAddress dns(8, 8, 8, 8);         // Google's Public DNS, Secondary: 8.8.4.4.
 // Initialize connection.
 WiFiMulti WiFiMulti;
 
-//Functions to send data from microcontroller to the nextion display. 
+// Functions to send data from microcontroller to the nextion display. 
 void sendGasTank1ToNextion(){
   String command = "gastank1.txt=\""+String(gastank1,2)+"\"";
   Serial.print(command);
@@ -93,7 +99,7 @@ void sendINSIDETemperatureToNextion(){
 }
 
 void sendOUTSIDETemperatureToNextion(){
-  String command = "OUTtemperature.txt=\""+String(tmp36_temperature,2)+"\"";
+  String command = "OUTtemperature.txt=\""+String(outsideTemperature,2)+"\"";
   Serial.print(command);
   endNextionCommand();
 }
@@ -115,7 +121,7 @@ void updateBlynk(){
   Blynk.virtualWrite(V2, gastank2);
   Blynk.virtualWrite(V3, temperature);
   Blynk.virtualWrite(V4, humidity);
-  Blynk.virtualWrite(V5, tmp36_temperature);
+  Blynk.virtualWrite(V5, outsideTemperature);
 }
 
 void getData(){
@@ -125,10 +131,8 @@ void getData(){
     gastank2 = 0.00;
   }
 
-  //Calculate temperature for TMP36-sensor
-  tmpVal = analogRead(tmp36Pin);
-  volts = tmpVal/1024.0;
-  tmp36_temperature = (volts - 0.5) * 100;
+  //Calculate temperature for BMP280-sensor.
+  outsideTemperature = bmp280.readTempC(), 2);
 
   gastank1 = data1_var;
   data1_var = data1_var - 0.01;
@@ -147,7 +151,7 @@ void getData(){
   Serial.print(temperature);
   Serial.println(" °C");
   Serial.print("Temperature OUT: "); 
-  Serial.print(tmp36_temperature);
+  Serial.print(outsideTemperature);
   Serial.println(" °C");
   Serial.print("Humidity: ");
   Serial.print(humidity);
@@ -175,7 +179,7 @@ void getData(){
 
 void setup(){
 
-  //Initialize serial communication using 9600 baud rate (9600 Required for operating Nextion).
+  // Initialize serial communication using 9600 baud rate (9600 Required for operating Nextion).
   Serial.begin(9600);
 
   // Initialize connection to BlynkAPI.
@@ -186,11 +190,17 @@ void setup(){
   scale.set_scale(CALIBRATION_FACTOR);
   scale.set_offset(11000);
 
-  //Initiliaze BME sensor, if it is present.
-  if (!bme.begin(0x76)) { 
-    Serial.println("\nBME280 sensor not found.");
+  // Initiliaze BME sensor. Give error if not found in address 76.
+  if (!bme.begin(0x76)){ 
+    Serial.println("\nBME280-sensor not found.");
     while (1);
     }
+
+  myWire.begin();
+
+  if (bmp280.beginI2C(myWire) == false){
+  Serial.println("\nBMP280-sensor not found.");
+  }
 
   delay(2000 );
   Serial.println("\nMotorhome sensor status monitor");
