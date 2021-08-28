@@ -48,9 +48,9 @@ Adafruit_BME280 bme;
 BME280 bmp280;
 
 // Network and API connection configuration.
-const char* auth = "9hWOddtQIGNjZYSitX3XEAVBI7MWG2J-";
-const char* ssid = "Searching...";
-const char* passwd = "4tP5ntY5";
+const char* auth = "Oopsie";
+const char* ssid = "daisy";
+const char* passwd = ":)";
 
 // Set static IP address for the ESP32.
 IPAddress local_ip(192, 168, 100, 68);
