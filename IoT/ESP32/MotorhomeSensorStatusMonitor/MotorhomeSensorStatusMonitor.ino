@@ -11,8 +11,8 @@
 #include <HX711.h>
 #include <SPI.h>
 #include <Adafruit_BME280.h>
-#include <SparkFunBME280.h> //For the BMP280-sensor (measuring outside temperature)
-#include <SoftwareWire.h>
+#include <Adafruit_BMP280.h> //For the BMP280-sensor (measuring outside temperature)
+#include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <BlynkSimpleEsp32.h>
 //#include <Nextion.h>
@@ -20,8 +20,6 @@
 // HX711 DT and SCK definitions. 
 #define LOADCELL_DOUT_PIN 5
 #define LOADCELL_SCK_PIN 18
-
-SoftwareWire myWire(36, 39); //SDA, SCL
 
 #define CALIBRATION_FACTOR 50500.00 // This value needs to be determined. 
 #define SEALEVELPRESSURE_HPA (1013.25)
@@ -42,15 +40,17 @@ int gastank1_weight, gastank2_weight;
 
 // Init HX711 LC Amplifier.
 HX711 scale;
+
 // Init BME280-sensor.
-Adafruit_BME280 bme;
-// Initialize BMP280-sensor.
-BME280 bmp280;
+Adafruit_BME280 bme1;
+
+// Init BMP280-sensor.
+Adafruit_BME280 bme2;
 
 // Network and API connection configuration.
-const char* auth = "Oopsie";
-const char* ssid = "daisy";
-const char* passwd = ":)";
+const char* auth = "*****";
+const char* ssid = "*****";
+const char* passwd = "*****";
 
 // Set static IP address for the ESP32.
 IPAddress local_ip(192, 168, 100, 68);
@@ -131,9 +131,6 @@ void getData(){
     gastank2 = 0.00;
   }
 
-  //Calculate temperature for BMP280-sensor.
-  outsideTemperature = bmp280.readTempC(), 2);
-
   gastank1 = data1_var;
   data1_var = data1_var - 0.01;
   gastank1_bar = gastank1 * 9.0909090909090909090909090909091;
@@ -145,8 +142,12 @@ void getData(){
   Serial.print(gastank2);
   Serial.println(" kg");
 
-  temperature = bme.readTemperature();
-  humidity = bme.readHumidity();
+  // Calculate data for BMP280-sensor.
+  outsideTemperature = bme2.readTemperature();
+
+  // Calculate data for BME280-sensor.
+  temperature = bme1.readTemperature();
+  humidity = bme1.readHumidity();
   Serial.print("Temperature IN: "); 
   Serial.print(temperature);
   Serial.println(" °C");
@@ -191,27 +192,17 @@ void setup(){
   scale.set_offset(11000);
 
   // Initiliaze BME sensor. Give error if not found in address 76.
-  if (!bme.begin(0x76)){ 
+  if (!bme1.begin(0x76)){ 
     Serial.println("\nBME280-sensor not found.");
-    while (1);
+    while(1);
     }
 
-  myWire.begin();
-
-  if (bmp280.beginI2C(myWire) == false){
-  Serial.println("\nBMP280-sensor not found.");
-  }
-
-  delay(2000 );
   Serial.println("\nMotorhome sensor status monitor");
   Serial.println("Tracks gas left on tanks, ambient temperature,");
   Serial.println("pressure and relative humidity.\n");
-  delay(500);
   Serial.println("Software version: 1.1 (beta).");
-  delay(500);
   Serial.println("Developed by Aleksi Jokinen © 2021\n");
   Serial.println("Initialising program....\n");
-  delay(2000);
 
   // Apply IP address, gateway and subnet mask defined in configuration.
   WiFi.config(local_ip, gateway, subnet);
@@ -230,7 +221,6 @@ void setup(){
     Serial.print(".");
   }
   // Print IP Address to serial monitor when connected.
-  delay(2000);
   Serial.println("\nStatus: OK");
   Serial.println("Connection established.");
   Serial.print("Network: ");
@@ -241,7 +231,6 @@ void setup(){
   Serial.println(WiFi.gatewayIP());
   Serial.print("Subnet mask: ");
   Serial.println(WiFi.subnetMask());
-  delay(2000);
 }
 
 void loop(){
