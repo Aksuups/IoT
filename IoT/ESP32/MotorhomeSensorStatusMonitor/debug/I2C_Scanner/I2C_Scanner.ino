@@ -13,7 +13,6 @@ TwoWire I2C_0 = TwoWire(0);
 //TwoWire I2C_1 = TwoWire(1);
 
 int counter = 0;
-Adafruit_BME280 bme;
 
 void setup(){
     Serial.begin(9600); // The baudrate of Serial monitor is set in 9600
