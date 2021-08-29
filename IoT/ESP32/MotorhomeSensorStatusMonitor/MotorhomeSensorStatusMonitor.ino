@@ -23,6 +23,18 @@
 #define CALIBRATION_FACTOR 50500.00 // This value needs to be determined. 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
+// I2C definitions.
+#define I2C_Freq 100000
+// BME280 SDA, SCL 
+#define SDA_0 21
+#define SCL_0 22
+// BMP280 SDA, SCL
+#define SDA_1 12
+#define SCL_1 14
+ 
+TwoWire I2C_0 = TwoWire(0);
+TwoWire I2C_1 = TwoWire(1);
+
 // Define global variables.
 float gastank1, gastank2, temperature, humidity, pressure, volts, outsideTemperature;
 float data1_var = 7.50;
@@ -187,6 +199,10 @@ void setup(){
 
   // Initialize connection to BlynkAPI.
   Blynk.begin(auth, ssid, passwd);
+
+  // Initialize I2C interfaces.
+  I2C_0.begin(SDA_0 , SCL_0 , I2C_Freq );
+  I2C_1.begin(SDA_1 , SCL_1 , I2C_Freq );
 
   // Initialize scale (HX711, load cells).
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
