@@ -18,7 +18,6 @@
 unsigned long currentTime = millis();
 unsigned long previousTime = 0;
 const long timeoutTime = 2000; 
-float data1, data2, temperature, humidity, pressure;
 int counter = 1;
 
 Adafruit_BME280 bme;
@@ -149,7 +148,7 @@ void loop() {
             client.println();
             
             // Display the HTML web page
-            client.println("<!DOCTYPE html><title>Motorhome sensor status monitor</title>");
+            client.println("<!DOCTYPE html><title>BME280, BMP280 Sensor test</title>");
             client.println("<html>");
             client.println("<style>");
             client.println("h2 { margin-bottom: -20px;}");
